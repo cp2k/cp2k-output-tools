@@ -7,5 +7,6 @@ Modular CP2K output file parsers, mostly in the form of regular expressions.
 ## Requirements
 
 * Python 3.6+
+* regex 2020+
 
 For development: https://poetry.eustace.io/ https://pytest.org/
