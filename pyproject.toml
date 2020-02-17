@@ -1,0 +1,34 @@
+[tool.poetry]
+name = "cp2k-output-tools"
+version = "0.1.0"
+description = "Python tools to handle CP2K output files"
+authors = ["Tiziano Müller <tiziano.mueller@chem.uzh.ch>"]
+repository = "https://github.com/dev-zero/cp2k-output-tools"
+license = "MIT"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Operating System :: OS Independent",
+    "Environment :: Console",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering :: Chemistry",
+    "Intended Audience :: Science/Research",
+]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.6"
+regex = "^2020.1"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.3.5"
+pytest-cov = "^2.8.1"
+codecov = "^2.0.15"
+pytest-console-scripts = "^0.2.0"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
+
+[tool.black]
+line-length = 132
+target_version = ['py38']
