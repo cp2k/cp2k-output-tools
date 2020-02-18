@@ -2,7 +2,7 @@ import regex as re
 from .common import FLOAT, MatcherResult
 
 
-MATCH = re.compile(
+MULLIKEN_POPULATION_ANALYSIS_RE = re.compile(
     rf"""
 # anchor to indicate beginning of the Mulliken Population Analysis
 ^[ \t]* Mulliken\ Population\ Analysis [ \t]* \n
@@ -45,8 +45,8 @@ MATCH = re.compile(
 )
 
 
-def match(content):
-    match = MATCH.search(content)
+def match_mulliken_population_analysis(content):
+    match = MULLIKEN_POPULATION_ANALYSIS_RE.search(content)
 
     if match is None:
         return None
@@ -69,13 +69,15 @@ def match(content):
 
         return MatcherResult(
             {
-                "per-atom": per_atom,
-                "total": {
-                    "population_alpha": float(captures["total_population_alpha"][0]),
-                    "population_beta": float(captures["total_population_beta"][0]),
-                    "charge": float(captures["total_charge"][0]),
-                    "spin": float(captures["total_spin"][0]),
-                },
+                "mulliken_population_analysis": {
+                    "per-atom": per_atom,
+                    "total": {
+                        "population_alpha": float(captures["total_population_alpha"][0]),
+                        "population_beta": float(captures["total_population_beta"][0]),
+                        "charge": float(captures["total_charge"][0]),
+                        "spin": float(captures["total_spin"][0]),
+                    },
+                }
             },
             match.span(),
         )
@@ -93,8 +95,10 @@ def match(content):
 
     return MatcherResult(
         {
-            "per-atom": per_atom,
-            "total": {"population": float(captures["total_population"][0]), "charge": float(captures["total_charge"][0])},
+            "mulliken_population_analysis": {
+                "per-atom": per_atom,
+                "total": {"population": float(captures["total_population"][0]), "charge": float(captures["total_charge"][0])},
+            }
         },
         match.span(),
     )

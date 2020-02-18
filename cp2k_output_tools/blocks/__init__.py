@@ -1,6 +1,4 @@
-from .condition_number import match as match_overlap_condition_number
-from .mulliken import match as match_mulliken
+from .condition_number import match_overlap_matrix_condition_number
+from .mulliken import match_mulliken_population_analysis
 
-matchers = {"overlap_condition_number": match_overlap_condition_number, "mulliken_population_analysis": match_mulliken}
-
-available_matchers = list(matchers.keys())
+builtin_matchers = [match_overlap_matrix_condition_number, match_mulliken_population_analysis]
