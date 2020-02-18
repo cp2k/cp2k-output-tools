@@ -6,10 +6,10 @@ from cp2k_output_tools.blocks import match_mulliken_population_analysis
 
 def test_mulliken_unrestricted():
     with open(TEST_DIR.joinpath("inputs/mulliken_unrestricted_snippet.out"), "r") as fhandle:
-        results = list(parse_iter(fhandle.read(), matchers=[match_mulliken_population_analysis]))
+        result = next(parse_iter(fhandle.read(), matchers=[match_mulliken_population_analysis]))
 
-        assert results
-        assert results[0] == {
+        assert result
+        assert result == {
             "mulliken_population_analysis": {
                 "per-atom": [
                     {
@@ -36,10 +36,10 @@ def test_mulliken_unrestricted():
 
 def test_mulliken_restricted():
     with open(TEST_DIR.joinpath("inputs/mulliken_restricted_snippet.out"), "r") as fhandle:
-        results = list(parse_iter(fhandle.read(), matchers=[match_mulliken_population_analysis]))
+        result = next(parse_iter(fhandle.read(), matchers=[match_mulliken_population_analysis]))
 
-        assert results
-        assert results[0] == {
+        assert result
+        assert result == {
             "mulliken_population_analysis": {
                 "per-atom": [
                     {"element": "Si", "kind": 1, "population": 3.999993, "charge": 7e-06},

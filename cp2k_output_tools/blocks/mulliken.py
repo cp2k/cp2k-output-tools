@@ -1,5 +1,5 @@
 import regex as re
-from .common import FLOAT, MatcherResult
+from .common import FLOAT
 
 
 MULLIKEN_POPULATION_ANALYSIS_RE = re.compile(
@@ -67,20 +67,17 @@ def match_mulliken_population_analysis(content):
                 }
             )
 
-        return MatcherResult(
-            {
-                "mulliken_population_analysis": {
-                    "per-atom": per_atom,
-                    "total": {
-                        "population_alpha": float(captures["total_population_alpha"][0]),
-                        "population_beta": float(captures["total_population_beta"][0]),
-                        "charge": float(captures["total_charge"][0]),
-                        "spin": float(captures["total_spin"][0]),
-                    },
-                }
-            },
-            match.span(),
-        )
+        return {
+            "mulliken_population_analysis": {
+                "per-atom": per_atom,
+                "total": {
+                    "population_alpha": float(captures["total_population_alpha"][0]),
+                    "population_beta": float(captures["total_population_beta"][0]),
+                    "charge": float(captures["total_charge"][0]),
+                    "spin": float(captures["total_spin"][0]),
+                },
+            }
+        }
 
     # spin-restricted case:
     for idx in range(len(captures["atom"])):
@@ -93,12 +90,9 @@ def match_mulliken_population_analysis(content):
             }
         )
 
-    return MatcherResult(
-        {
-            "mulliken_population_analysis": {
-                "per-atom": per_atom,
-                "total": {"population": float(captures["total_population"][0]), "charge": float(captures["total_charge"][0])},
-            }
-        },
-        match.span(),
-    )
+    return {
+        "mulliken_population_analysis": {
+            "per-atom": per_atom,
+            "total": {"population": float(captures["total_population"][0]), "charge": float(captures["total_charge"][0])},
+        }
+    }

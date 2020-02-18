@@ -8,4 +8,4 @@ def parse_iter(content, matchers: List[callable] = builtin_matchers):
         match = matcher(content)
 
         if match:
-            yield match.values
+            yield match
