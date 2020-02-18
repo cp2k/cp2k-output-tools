@@ -33,32 +33,35 @@ $ cp2kparse calc.out
   "dbcsr": {
     "cpu multiplication driver": "XSMM",
     "maximum elements for images": "UNLIMITED",
-    "multiplication size stacks": "3",
-    "multiplication stack size": "1000",
-    "multiplicative factor virtual images": "1",
-    "multrec recursion limit": "512",
-    "use multiplication densification": "T"
+    "multiplication size stacks": 3,
+    "multiplication stack size": 1000,
+    "multiplicative factor virtual images": 1,
+    "multrec recursion limit": 512,
+    "use multiplication densification": true
+  },
+  "energies": {
+    "total force_eval": -251.6873903110507
   },
   "global": {
-    "all-to-all communication in single precision": "F",
+    "all-to-all communication in single precision": false,
     "basis set file name": "BASIS_MOLOPT",
     "coordinate file name": "__STD_INPUT__",
     "cpu model name": "Intel(R) Core(TM) i7-4790 CPU @ 3.60GHz",
-    "cpuid": "1002",
-    "ffts using library dependent lengths": "F",
-    "force environment number": "1",
+    "cpuid": 1002,
+    "ffts using library dependent lengths": false,
+    "force environment number": 1,
     "global print level": "MEDIUM",
     "method name": "CP2K",
     "mm potential file name": "MM_POTENTIAL",
-    "mpi i/o enabled": "T",
-    "number of threads for this process": "1",
+    "mpi i/o enabled": true,
+    "number of threads for this process": 1,
     "potential file name": "POTENTIAL",
     "preferred diagonalization lib.": "SL",
     "preferred fft library": "FFTW3",
     "project name": "Si-supercell-001",
     "run type": "ENERGY_FORCE",
-    "this output is from process": "0",
-    "total number of message passing processes": "1"
+    "this output is from process": 0,
+    "total number of message passing processes": 1
   },
   "mulliken population analysis": {
     "per atom": [
