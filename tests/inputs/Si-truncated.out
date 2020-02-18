@@ -1,0 +1,55 @@
+ DBCSR| CPU Multiplication driver                                           XSMM
+ DBCSR| Multrec recursion limit                                              512
+ DBCSR| Multiplication stack size                                           1000
+ DBCSR| Maximum elements for images                                    UNLIMITED
+ DBCSR| Multiplicative factor virtual images                                   1
+ DBCSR| Use multiplication densification                                       T
+ DBCSR| Multiplication size stacks                                             3
+
+
+  **** **** ******  **  PROGRAM STARTED AT               2019-09-17 17:01:19.273
+ ***** ** ***  *** **   PROGRAM STARTED ON                                tcpc18
+ **    ****   ******    PROGRAM STARTED BY                               tiziano
+ ***** **    ** ** **   PROGRAM PROCESS ID                                 23773
+  **** **  *******  **  PROGRAM STARTED IN /users/tiziano/work/phonopy/example/S
+                                           i-CP2K
+
+ CP2K| version string:                    CP2K version 7.0 (Development Version)
+ CP2K| source code revision number:                                  git:43f50e2
+ CP2K| cp2kflags: libint fftw3 libxc xsmm spglib                                
+ CP2K| is freely available from                            https://www.cp2k.org/
+ CP2K| Program compiled at                         Mon Sep 16 14:42:43 CEST 2019
+ CP2K| Program compiled on                                                tcpc18
+ CP2K| Program compiled for                                                local
+ CP2K| Data directory path                               /data/tiziano/cp2k/data
+ CP2K| Input file name                                      Si-supercell-001.inp
+
+ GLOBAL| Force Environment number                                              1
+ GLOBAL| Basis set file name                                        BASIS_MOLOPT
+ GLOBAL| Potential file name                                           POTENTIAL
+ GLOBAL| MM Potential file name                                     MM_POTENTIAL
+ GLOBAL| Coordinate file name                                      __STD_INPUT__
+ GLOBAL| Method name                                                        CP2K
+ GLOBAL| Project name                                           Si-supercell-001
+ GLOBAL| Preferred FFT library                                             FFTW3
+ GLOBAL| Preferred diagonalization lib.                                       SL
+ GLOBAL| Run type                                                   ENERGY_FORCE
+ GLOBAL| All-to-all communication in single precision                          F
+ GLOBAL| FFTs using library dependent lengths                                  F
+ GLOBAL| Global print level                                               MEDIUM
+ GLOBAL| MPI I/O enabled                                                       T
+ GLOBAL| Total number of message passing processes                             1
+ GLOBAL| Number of threads for this process                                    1
+ GLOBAL| This output is from process                                           0
+ GLOBAL| CPU model name                  Intel(R) Core(TM) i7-4790 CPU @ 3.60GHz
+ GLOBAL| CPUID                                                              1002
+
+ MEMORY| system memory details [Kb]
+ MEMORY|                        rank 0           min           max       average
+ MEMORY| MemTotal             16373312      16373312      16373312      16373312
+ MEMORY| MemFree               7873628       7873628       7873628       7873628
+ MEMORY| Buffers                324476        324476        324476        324476
+ MEMORY| Cached                2849016       2849016       2849016       2849016
+ MEMORY| Slab                   342564        342564        342564        342564
+ MEMORY| SReclaimable           192488        192488        192488        192488
+ MEMORY| MemLikelyFree        11239608      11239608      11239608      11239608
