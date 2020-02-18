@@ -10,26 +10,26 @@ def test_mulliken_unrestricted():
 
         assert result
         assert result == {
-            "mulliken_population_analysis": {
-                "per-atom": [
+            "mulliken population analysis": {
+                "per atom": [
                     {
                         "element": "Co",
                         "kind": 1,
-                        "population_alpha": 9.332183,
-                        "population_beta": 7.66782,
+                        "population alpha": 9.332183,
+                        "population beta": 7.66782,
                         "charge": -2e-06,
                         "spin": 1.664363,
                     },
                     {
                         "element": "Co",
                         "kind": 1,
-                        "population_alpha": 9.332177,
-                        "population_beta": 7.66782,
+                        "population alpha": 9.332177,
+                        "population beta": 7.66782,
                         "charge": 2e-06,
                         "spin": 1.664357,
                     },
                 ],
-                "total": {"population_alpha": 18.66436, "population_beta": 15.33564, "charge": -0.0, "spin": 3.32872},
+                "total": {"population alpha": 18.66436, "population beta": 15.33564, "charge": -0.0, "spin": 3.32872},
             }
         }
 
@@ -40,8 +40,8 @@ def test_mulliken_restricted():
 
         assert result
         assert result == {
-            "mulliken_population_analysis": {
-                "per-atom": [
+            "mulliken population analysis": {
+                "per atom": [
                     {"element": "Si", "kind": 1, "population": 3.999993, "charge": 7e-06},
                     {"element": "Si", "kind": 1, "population": 4.0, "charge": 0.0},
                     {"element": "Si", "kind": 1, "population": 4.0, "charge": -0.0},

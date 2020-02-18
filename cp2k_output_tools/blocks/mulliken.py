@@ -60,19 +60,19 @@ def match_mulliken_population_analysis(content):
                 {
                     "element": captures["element"][idx],
                     "kind": int(captures["kind"][idx]),
-                    "population_alpha": float(captures["population_alpha"][idx]),
-                    "population_beta": float(captures["population_beta"][idx]),
+                    "population alpha": float(captures["population_alpha"][idx]),
+                    "population beta": float(captures["population_beta"][idx]),
                     "charge": float(captures["charge"][idx]),
                     "spin": float(captures["spin"][idx]),
                 }
             )
 
         return {
-            "mulliken_population_analysis": {
-                "per-atom": per_atom,
+            "mulliken population analysis": {
+                "per atom": per_atom,
                 "total": {
-                    "population_alpha": float(captures["total_population_alpha"][0]),
-                    "population_beta": float(captures["total_population_beta"][0]),
+                    "population alpha": float(captures["total_population_alpha"][0]),
+                    "population beta": float(captures["total_population_beta"][0]),
                     "charge": float(captures["total_charge"][0]),
                     "spin": float(captures["total_spin"][0]),
                 },
@@ -91,8 +91,8 @@ def match_mulliken_population_analysis(content):
         )
 
     return {
-        "mulliken_population_analysis": {
-            "per-atom": per_atom,
+        "mulliken population analysis": {
+            "per atom": per_atom,
             "total": {"population": float(captures["total_population"][0]), "charge": float(captures["total_charge"][0])},
         }
     }
