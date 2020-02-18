@@ -11,7 +11,6 @@ def test_start_and_stop():
         result = next(parse_iter(fhandle.read(), matchers=[match_program_info]))
 
         assert result
-        print(result)
         assert result == {
             "program info": {
                 "started at": "2019-09-17 17:01:19.273",
