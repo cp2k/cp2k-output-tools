@@ -1,0 +1,29 @@
+ DISTRIBUTION OF THE OVERLAP MATRIX
+              Number  of non-zero blocks:                                     10
+              Percentage non-zero blocks:                                 100.00
+              Average number of blocks per CPU:                                1
+              Maximum number of blocks per CPU:                                1
+              Average number of matrix elements per CPU:                     344
+              Maximum number of matrix elements per CPU:                    1235
+
+ OVERLAP MATRIX CONDITION NUMBER AT GAMMA POINT
+ 1-Norm Condition Number (Estimate)
+   CN : |A|*|A^-1|:  1.513E+001 *  7.525E+003   = 1.139E+005  Log(1-CN):  5.0563
+ 1-Norm and 2-Norm Condition Numbers using Diagonalization
+   CN : |A|*|A^-1|:  1.513E+001 *  2.298E+004   = 3.477E+005  Log(1-CN):  5.5412
+   CN : max/min ev:  1.081E+001 /  1.036E-004   = 1.044E+005  Log(2-CN):  5.0187
+
+ Spin 1
+
+ Number of electrons:                                                         30
+ Number of occupied orbitals:                                                 30
+ Number of molecular orbitals:                                                40
+
+ Spin 2
+
+ Number of electrons:                                                         30
+ Number of occupied orbitals:                                                 30
+ Number of molecular orbitals:                                                40
+
+ Number of orbital functions:                                                140
+ Number of independent orbital functions:                                    140
