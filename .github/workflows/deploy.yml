@@ -6,11 +6,11 @@ on:
     - 'v*'
 
 jobs:
-  pre-commit:
+  deploy:
     runs-on: ubuntu-latest
     steps:
-    - name: Publish package to PyPI
-      uses: pypa/gh-action-pypi-publish@master
-      with:
-        user: __token__
-        password: ${{ secrets.PYPI_TOKEN }}
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v1
+    - uses: dschep/install-poetry-action@v1.3
+    - run: poetry config pypi-token.pypi ${{ secrets.PYPI_TOKEN }}
+    - run: poetry publish --build
