@@ -1,3 +1,5 @@
+import pytest
+
 from . import TEST_DIR
 
 from cp2k_output_tools.parser import parse_iter
@@ -110,3 +112,8 @@ def test_mulliken_restricted():
                 "total": {"population": 256.0, "charge": 0.0},
             }
         }
+
+
+def test_no_mulliken():
+    with pytest.raises(StopIteration):
+        next(parse_iter("", matchers=[match_mulliken_population_analysis]))
