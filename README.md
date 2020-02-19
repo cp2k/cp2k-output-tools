@@ -17,6 +17,20 @@ For development: https://poetry.eustace.io/ https://pytest.org/
 There is a simple command-line interface `cp2kparse`:
 
 ```console
+$ cp2kparse --help
+usage: cp2kparse [-h] [-y] [-k <path>] [<file>]
+
+Parse the CP2K output file and return a JSON
+
+positional arguments:
+  <file>                CP2K output file, stdin if not specified
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -y, --yaml            output yaml instead of json
+  -k <path>, --key <path>
+                        Path, ex.: 'energies/total force_eval'
+
 $ cp2kparse calc.out
 {
   "cp2k": {
