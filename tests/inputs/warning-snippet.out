@@ -1,0 +1,19 @@
+  ...
+
+  Total energy:                                              -132.99430992563012
+
+  Integrated absolute spin density  :                               0.0000005042
+
+ *** WARNING in qs_scf_post_gpw.F:2162 :: Spin contamination estimate not ***
+ *** implemented for k-points.                                            ***
+
+
+ !-----------------------------------------------------------------------------!
+                     Mulliken Population Analysis
+ ...
+
+ -------------------------------------------------------------------------------
+
+ The number of warnings for this run is : 2
+
+ -------------------------------------------------------------------------------

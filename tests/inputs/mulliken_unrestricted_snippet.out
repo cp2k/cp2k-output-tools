@@ -1,0 +1,25 @@
+
+ *** WARNING in qs_scf_post_gpw.F:2162 :: Spin contamination estimate not ***
+ *** implemented for k-points.                                            ***
+
+
+ !-----------------------------------------------------------------------------!
+                     Mulliken Population Analysis
+
+ #  Atom  Element  Kind  Atomic population (alpha,beta) Net charge  Spin moment
+       1     Co       1         9.332183     7.667820    -0.000002     1.664363
+       2     Co       1         9.332177     7.667820     0.000002     1.664357
+ # Total charge and spin       18.664360    15.335640    -0.000000     3.328720
+
+ !-----------------------------------------------------------------------------!
+
+ !-----------------------------------------------------------------------------!
+                           Hirshfeld Charges
+
+  #Atom  Element  Kind  Ref Charge     Population       Spin moment  Net charge
+      1       Co     1      17.000    9.332   7.668            1.664      0.000
+      2       Co     1      17.000    9.332   7.668            1.664     -0.000
+
+  Total Charge                                                            0.000
+ !-----------------------------------------------------------------------------!
+
