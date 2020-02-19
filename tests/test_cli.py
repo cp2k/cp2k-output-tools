@@ -13,6 +13,9 @@ def test_cp2kparse_mulliken(script_runner):
 
     assert isinstance(tree, dict)
     assert tree == {
+        "warnings": [
+            {"filename": "qs_scf_post_gpw.F", "line": 2162, "message": "Spin contamination estimate not implemented for k-points."}
+        ],
         "mulliken population analysis": {
             "per atom": [
                 {
@@ -33,5 +36,5 @@ def test_cp2kparse_mulliken(script_runner):
                 },
             ],
             "total": {"population alpha": 18.66436, "population beta": 15.33564, "charge": -0.0, "spin": 3.32872},
-        }
+        },
     }
