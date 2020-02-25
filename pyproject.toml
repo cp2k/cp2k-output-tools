@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "cp2k-output-tools"
-version = "0.1.2"
+version = "0.1.3"
 description = "Python tools to handle CP2K output files"
 authors = ["Tiziano Müller <tiziano.mueller@chem.uzh.ch>"]
 repository = "https://github.com/dev-zero/cp2k-output-tools"
