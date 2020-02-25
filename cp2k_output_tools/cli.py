@@ -17,13 +17,16 @@ def cp2kparse():
     )
     parser.add_argument("-y", "--yaml", action="store_true", help="output yaml instead of json")
     parser.add_argument(
+        "-s", "--safe-keys", action="store_true", help="generate 'safe' key names (e.g. without spaces, dashes, ..)"
+    )
+    parser.add_argument(
         "-k", "--key", dest="paths", metavar="<path>", type=str, action="append", help="Path, ex.: 'energies/total force_eval'"
     )
     args = parser.parse_args()
 
     tree = {}
 
-    for match in parse_iter(args.file.read()):
+    for match in parse_iter(args.file.read(), key_mangling=args.safe_keys):
         tree.update(match)
 
     def _(val):

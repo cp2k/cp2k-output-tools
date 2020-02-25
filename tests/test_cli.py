@@ -12,6 +12,19 @@ def test_cp2kparse_key(script_runner):
     assert ret.stdout == "energies/total force_eval: -251.6873903110507\n"
 
 
+def test_cp2kparse_key_safe(script_runner):
+    ret = script_runner.run("cp2kparse", "-k", "energies/total force_eval", "-s", str(TEST_DIR.joinpath("inputs/Si.out")))
+
+    assert not ret.success
+    assert "KeyError" in ret.stderr
+
+    ret = script_runner.run("cp2kparse", "-k", "energies/total_force_eval", "-s", str(TEST_DIR.joinpath("inputs/Si.out")))
+
+    assert ret.success
+    assert ret.stderr == ""
+    assert ret.stdout == "energies/total_force_eval: -251.6873903110507\n"
+
+
 def test_cp2kparse_mulliken(script_runner):
     ret = script_runner.run("cp2kparse", str(TEST_DIR.joinpath("inputs/mulliken_unrestricted_snippet.out")))
 
