@@ -1,6 +1,6 @@
 # cp2k-output-tools
 
-[![Build Status](https://github.com/dev-zero/cp2k-output-tools/workflows/tests/badge.svg)](https://github.com/dev-zero/cp2k-output-tools/actions) [![codecov](https://codecov.io/gh/dev-zero/cp2k-output-tools/branch/develop/graph/badge.svg)](https://codecov.io/gh/dev-zero/cp2k-output-tools) [![PyPI](https://img.shields.io/pypi/pyversions/cp2k-output-tools)](https://pypi.org/project/cp2k-output-tools/)
+[![Build Status](https://github.com/cp2k/cp2k-output-tools/workflows/tests/badge.svg)](https://github.com/dev-zero/cp2k-output-tools/actions) [![codecov](https://codecov.io/gh/dev-zero/cp2k-output-tools/branch/develop/graph/badge.svg)](https://codecov.io/gh/dev-zero/cp2k-output-tools) [![PyPI](https://img.shields.io/pypi/pyversions/cp2k-output-tools)](https://pypi.org/project/cp2k-output-tools/)
 
 Modular CP2K output file parsers, mostly in the form of regular expressions.
 
