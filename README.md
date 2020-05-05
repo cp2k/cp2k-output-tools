@@ -1,8 +1,12 @@
 # cp2k-output-tools
 
-[![Build Status](https://github.com/cp2k/cp2k-output-tools/workflows/tests/badge.svg)](https://github.com/dev-zero/cp2k-output-tools/actions) [![codecov](https://codecov.io/gh/dev-zero/cp2k-output-tools/branch/develop/graph/badge.svg)](https://codecov.io/gh/dev-zero/cp2k-output-tools) [![PyPI](https://img.shields.io/pypi/pyversions/cp2k-output-tools)](https://pypi.org/project/cp2k-output-tools/)
+[![Build Status](https://github.com/cp2k/cp2k-output-tools/workflows/tests/badge.svg)](https://github.com/cp2k/cp2k-output-tools/actions) [![codecov](https://codecov.io/gh/cp2k/cp2k-output-tools/branch/develop/graph/badge.svg)](https://codecov.io/gh/cp2k/cp2k-output-tools) [![PyPI](https://img.shields.io/pypi/pyversions/cp2k-output-tools)](https://pypi.org/project/cp2k-output-tools/)
 
-Modular CP2K output file parsers, mostly in the form of regular expressions.
+Modular CP2K output file parsers, mostly in the form of regular expressions plus other tools to mangle various CP2K output:
+
+  * `cp2kparse` ... parse CP2K output files (for restart & input files look at the [cp2k-input-tools](https://github.com/cp2k/cp2k-input-tools) project)
+  * `xyz_restart_parser` ... when restarts occur during an MD you may end up with duplicated frames in the trajectory, this tool filters them
+  * `cp2k_bs2csv` ... convert a CP2K band structure file to multiple (one-per-set) CSV files for easier plotting. There is also an API available if you need to import bandstructure data into your application.
 
 ## Requirements
 
@@ -12,7 +16,7 @@ Modular CP2K output file parsers, mostly in the form of regular expressions.
 For development: https://poetry.eustace.io/ https://pytest.org/
 
 
-## Usage
+## Usage: cp2kparse
 
 There is a simple command-line interface `cp2kparse`:
 
@@ -491,6 +495,14 @@ from cp2k_output_tools import parse_iter
 with open("calc.out", "r") as fhandle:
     for match in parse_iter(fhandle.read()):
         print(match.values)
+```
+
+## Usage: xyz_restart_cleaner
+
+```console
+$ xyz_restart_cleaner orig_trajectory.xyz new_trajectory.xyz
+found restart point @1, dropping 1 frames, flushing 1
+flushing remaining 2 frames
 ```
 
 ## Development

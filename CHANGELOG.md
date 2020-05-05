@@ -1,3 +1,8 @@
+## [0.2.0] - 2020-05-05
+
+* add cp2k_bs2csv with support for CP2K v8+ and an API
+* add xyz_restart_cleaner
+
 ## [0.1.4] - 2020-04-03
 
 * updated project urls

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "cp2k-output-tools"
-version = "0.1.4"
+version = "0.2.0"
 description = "Python tools to handle CP2K output files"
 authors = ["Tiziano Müller <tiziano.mueller@chem.uzh.ch>"]
 repository = "https://github.com/cp2k/cp2k-output-tools"
@@ -19,23 +19,26 @@ readme = "README.md"
 python = "^3.6"
 regex = "^2020.1"
 "ruamel.yaml" = {version = "^0.16.5", optional = true}
+dataclasses = {version = "^0.7", python = "~3.6"}
 
 [tool.poetry.extras]
 yaml = ["ruamel.yaml"]
 
 [tool.poetry.dev-dependencies]
-pytest = "^5.3.5"
-pytest-cov = "^2.8.1"
+pytest = "^5.2"
 codecov = "^2.0.15"
+pytest-cov = "^2.7.1"
 pytest-console-scripts = "^0.2.0"
 
-[build-system]
-requires = ["poetry>=0.12"]
-build-backend = "poetry.masonry.api"
+[tool.poetry.scripts]
+cp2kparse = 'cp2k_output_tools.cli:cp2kparse'
+xyz_restart_cleaner = 'cp2k_output_tools.trajectories.xyz_cli:xyz_restart_cleaner'
+cp2k_bs2csv = 'cp2k_output_tools.bandstructure:cp2k_bs2csv'
 
 [tool.black]
 line-length = 132
 target_version = ['py38']
 
-[tool.poetry.scripts]
-cp2kparse = 'cp2k_output_tools.cli:cp2kparse'
+[build-system]
+requires = ["poetry>=1"]
+build-backend = "poetry.masonry.api"
