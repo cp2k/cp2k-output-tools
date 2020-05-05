@@ -6,6 +6,7 @@ Modular CP2K output file parsers, mostly in the form of regular expressions plus
 
   * `cp2kparse` ... parse CP2K output files (for restart & input files look at the [cp2k-input-tools](https://github.com/cp2k/cp2k-input-tools) project)
   * `xyz_restart_parser` ... when restarts occur during an MD you may end up with duplicated frames in the trajectory, this tool filters them
+  * `cp2k_bs2csv` ... convert a CP2K band structure file to multiple (one-per-set) CSV files for easier plotting. There is also an API available if you need to import bandstructure data into your application.
 
 ## Requirements
 
