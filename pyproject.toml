@@ -20,6 +20,7 @@ python = "^3.6"
 regex = "^2020.1"
 "ruamel.yaml" = {version = "^0.16.5", optional = true}
 dataclasses = {version = "^0.7", python = "~3.6"}
+numpy = "^1.19"
 
 [tool.poetry.extras]
 yaml = ["ruamel.yaml"]
@@ -34,6 +35,7 @@ pytest-console-scripts = "^0.2.0"
 cp2kparse = 'cp2k_output_tools.cli:cp2kparse'
 xyz_restart_cleaner = 'cp2k_output_tools.trajectories.xyz_cli:xyz_restart_cleaner'
 cp2k_bs2csv = 'cp2k_output_tools.scripts.bandstructure:cp2k_bs2csv'
+cp2k_pdos = 'cp2k_output_tools.scripts.pdos:cp2k_pdos'
 
 [tool.black]
 line-length = 132
