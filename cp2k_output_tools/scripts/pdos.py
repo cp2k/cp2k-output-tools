@@ -67,7 +67,7 @@ def cp2k_pdos():
                 print(
                     f"The file '{pdosfilename}' does not look like a CP2K PDOS output.\n"
                     "If it is indeed a correct output file, please report an issue at\n"
-                    "    https://github.com/dev-zero/cp2k-tools/issues"
+                    "    https://github.com/cp2k/cp2k-output-tools/issues"
                 )
                 sys.exit(1)
 
