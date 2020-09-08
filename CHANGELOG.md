@@ -1,3 +1,7 @@
+## [0.3.1] - 2020-09-09
+
+* cp2k_pdos: add support for list-of-atoms output
+
 ## [0.3.0] - 2020-09-09
 
 * add cp2k_pdos tool
