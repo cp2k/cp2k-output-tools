@@ -1,3 +1,8 @@
+## [0.3.0] - 2020-09-09
+
+* add cp2k_pdos tool
+* reorganize scripts/ dir
+
 ## [0.2.0] - 2020-05-05
 
 * add cp2k_bs2csv with support for CP2K v8+ and an API
