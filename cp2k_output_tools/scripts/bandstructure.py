@@ -178,8 +178,8 @@ def cp2k_bs2csv():
     for setnr, totalpoints, specialpoints, points in set_gen(content):
         filename = args.output_pattern.format(bsfile=args.bsfile, setnr=setnr)
 
+        print(f"writing point set {filename} (total number of k-points: {totalpoints})")
         with open(filename, "w") as csvout:
-            print(f"writing point set {filename} (total number of k-points: {totalpoints})")
             print("with the following special points:")
 
             for point in specialpoints:
