@@ -19,7 +19,7 @@ readme = "README.md"
 python = "^3.6"
 regex = "^2020.1"
 "ruamel.yaml" = {version = "^0.16.5", optional = true}
-dataclasses = {version = "^0.7", python = "~3.6"}
+dataclasses = {version = ">=0.7,<0.9", python = "~3.6"}
 numpy = "^1.19"
 
 [tool.poetry.extras]
