@@ -4,10 +4,10 @@
 
 Modular CP2K output file parsers, mostly in the form of regular expressions plus other tools to mangle various CP2K output:
 
-  * `cp2kparse` ... parse CP2K output (for restart & input files look at the [cp2k-input-tools](https://github.com/cp2k/cp2k-input-tools) project)
-  * `xyz_restart_parser` ... when restarts occur during an MD you may end up with duplicated frames in the trajectory, this tool filters them
+  * `cp2kparse` ... parse CP2K output (for restart & input files look at the [cp2k-input-tools](https://github.com/cp2k/cp2k-input-tools) project) and allow easy selection of common values.
+  * `xyz_restart_parser` ... when restarts occur during an MD you may end up with duplicated frames in the trajectory, this tool filters them (and can easily handle huge files)
   * `cp2k_bs2csv` ... convert a CP2K band structure file to multiple (one-per-set) CSV files for easier plotting. There is also an API available if you need to import bandstructure data into your application.
-  * `cp2k_pdos` ... bring CP2Ks PDOS dump into a more CSV-like form for easier plotting/parsing
+  * `cp2k_pdos` ... apply a convolution with Gaussians on a regular grid on the CP2K PDOS output and generate a CSV file for further processing or plotting. The same grid is used for all input files with the min/max of the grid automatically determined, but no summation of the different projections is done.
 
 ## Requirements
 
