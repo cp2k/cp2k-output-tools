@@ -18,6 +18,6 @@ FORBIDDEN_CHARS = " -[](){}/.|^"
 
 
 def test_parse_safe_keys():
-    with open(TEST_DIR.joinpath("inputs/Si.out"), "r") as fhandle:
+    with open(TEST_DIR.joinpath("outputs/Si.out"), "r") as fhandle:
         for match in parse_iter(fhandle.read(), key_mangling=True):
             assert not any(c in key for c in FORBIDDEN_CHARS for key in _key_iter(match))

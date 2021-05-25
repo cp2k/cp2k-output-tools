@@ -5,7 +5,7 @@ from . import TEST_DIR
 
 @pytest.mark.script_launch_mode("subprocess")
 def test_one_restart(script_runner):
-    ret = script_runner.run("xyz_restart_cleaner", str(TEST_DIR / "inputs" / "one_restart.xyz"))
+    ret = script_runner.run("xyz_restart_cleaner", str(TEST_DIR / "outputs" / "one_restart.xyz"))
 
     assert ret.success
     assert "found restart point @1, dropping 1 frames, flushing 1" in ret.stderr
@@ -14,7 +14,7 @@ def test_one_restart(script_runner):
 
 @pytest.mark.script_launch_mode("subprocess")
 def test_restart_before_first(script_runner):
-    ret = script_runner.run("xyz_restart_cleaner", str(TEST_DIR / "inputs" / "restart_before_first.xyz"))
+    ret = script_runner.run("xyz_restart_cleaner", str(TEST_DIR / "outputs" / "restart_before_first.xyz"))
 
     assert ret.success
     assert (

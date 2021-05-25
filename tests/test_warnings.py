@@ -5,7 +5,7 @@ from cp2k_output_tools.blocks import match_warnings
 
 
 def test_warnings():
-    with open(TEST_DIR.joinpath("inputs/warning-snippet.out"), "r") as fhandle:
+    with open(TEST_DIR.joinpath("outputs/warning-snippet.out"), "r") as fhandle:
         result = next(parse_iter(fhandle.read(), matchers=[match_warnings]))
 
         assert result

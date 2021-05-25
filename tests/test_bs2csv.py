@@ -5,7 +5,7 @@ from . import TEST_DIR
 
 @pytest.mark.script_launch_mode("subprocess")
 def test_bs2csv_cp2k7_input(script_runner):
-    ret = script_runner.run("cp2k_bs2csv", str(TEST_DIR / "inputs" / "WO3.cp2k-7.bs"))
+    ret = script_runner.run("cp2k_bs2csv", str(TEST_DIR / "outputs" / "WO3.cp2k-7.bs"))
 
     assert ret.success
     assert "total number of k-points: 11" in ret.stdout
@@ -14,7 +14,7 @@ def test_bs2csv_cp2k7_input(script_runner):
 
 @pytest.mark.script_launch_mode("subprocess")
 def test_bs2csv_cp2k8_input(script_runner):
-    ret = script_runner.run("cp2k_bs2csv", str(TEST_DIR / "inputs" / "WO3.cp2k-8.bs"))
+    ret = script_runner.run("cp2k_bs2csv", str(TEST_DIR / "outputs" / "WO3.cp2k-8.bs"))
 
     assert ret.success
     assert "total number of k-points: 11" in ret.stdout
