@@ -7,7 +7,7 @@ from cp2k_output_tools.blocks import match_mulliken_population_analysis
 
 
 def test_mulliken_unrestricted():
-    with open(TEST_DIR.joinpath("inputs/mulliken_unrestricted_snippet.out"), "r") as fhandle:
+    with open(TEST_DIR.joinpath("outputs/mulliken_unrestricted_snippet.out"), "r") as fhandle:
         result = next(parse_iter(fhandle.read(), matchers=[match_mulliken_population_analysis]))
 
         assert result
@@ -37,7 +37,7 @@ def test_mulliken_unrestricted():
 
 
 def test_mulliken_restricted():
-    with open(TEST_DIR.joinpath("inputs/mulliken_restricted_snippet.out"), "r") as fhandle:
+    with open(TEST_DIR.joinpath("outputs/mulliken_restricted_snippet.out"), "r") as fhandle:
         result = next(parse_iter(fhandle.read(), matchers=[match_mulliken_population_analysis]))
 
         assert result

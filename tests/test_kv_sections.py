@@ -5,7 +5,7 @@ from cp2k_output_tools.blocks import match_kv_sections
 
 
 def test_kv_sections():
-    with open(TEST_DIR.joinpath("inputs/Si.out"), "r") as fhandle:
+    with open(TEST_DIR.joinpath("outputs/Si.out"), "r") as fhandle:
         result = next(parse_iter(fhandle.read(), matchers=[match_kv_sections]))
 
         assert result
