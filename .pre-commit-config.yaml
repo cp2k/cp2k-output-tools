@@ -2,16 +2,13 @@
 # # Install pre-commit hooks via
 # pre-commit install
 
-default_language_version:
-  python: python3
-
 repos:
 - repo: https://github.com/ambv/black
-  rev: stable
+  rev: 21.6b0
   hooks:
   - id: black
 - repo: https://gitlab.com/pycqa/flake8
-  rev: 3.7.0
+  rev: 3.9.2
   hooks:
   - id: flake8
     additional_dependencies: ["flake8-bugbear"]
