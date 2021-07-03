@@ -9,7 +9,7 @@ def test_condition_number():
         result = next(parse_iter(fhandle.read(), matchers=[match_overlap_matrix_condition_number]))
 
         assert result
-        assert result == {
+        assert result.data == {
             "overlap_matrix_condition_number": {
                 "1-norm (estimate)": {"|A|": 15.13, "|A^-1|": 7525.0, "CN": 113900.0, "Log(CN)": 5.0563},
                 "1-norm (using diagonalization)": {"|A|": 15.13, "|A^-1|": 22980.0, "CN": 347700.0, "Log(CN)": 5.5412},

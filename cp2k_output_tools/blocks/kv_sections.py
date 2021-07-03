@@ -1,4 +1,7 @@
+from typing import Optional
 import regex as re
+
+from .common import BlockMatch
 
 KV_SECTION_RE = re.compile(
     r"""
@@ -13,8 +16,9 @@ KV_SECTION_RE = re.compile(
 )
 
 
-def match_kv_sections(content):
+def match_kv_sections(content: str) -> Optional[BlockMatch]:
     result = {}
+    spans = []
 
     subsections = {"dft": ("cutoffs",), "qs": ("multi grid cutoff [a.u.]", "interaction thresholds")}
 
@@ -40,6 +44,7 @@ def match_kv_sections(content):
             rpointer = result[section]
 
         value = match["value"]
+        spans += match.spans(0)
 
         if value in ["T", "F"]:
             rpointer[key] = True if value == "T" else False
@@ -62,4 +67,4 @@ def match_kv_sections(content):
     if not result:
         return None
 
-    return result
+    return BlockMatch(result, spans)

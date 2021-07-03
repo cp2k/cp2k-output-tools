@@ -9,7 +9,7 @@ def test_warnings():
         result = next(parse_iter(fhandle.read(), matchers=[match_warnings]))
 
         assert result
-        assert result == {
+        assert result.data == {
             "nwarnings": 2,
             "warnings": [
                 {

@@ -1,6 +1,7 @@
+from typing import Optional
 import regex as re
 
-from .common import FLOAT
+from .common import FLOAT, BlockMatch
 
 FORCE_EVAL_ENERGY_RE = re.compile(
     rf"""
@@ -10,10 +11,10 @@ FORCE_EVAL_ENERGY_RE = re.compile(
 )
 
 
-def match_energies(content):
+def match_energies(content: str) -> Optional[BlockMatch]:
     match = FORCE_EVAL_ENERGY_RE.search(content)
 
     if not match:
         return None
 
-    return {"energies": {"total force_eval": float(match["value"])}}
+    return BlockMatch({"energies": {"total force_eval": float(match["value"])}}, match.spans(0))

@@ -9,4 +9,4 @@ def test_energies():
         result = next(parse_iter(fhandle.read(), matchers=[match_energies]))
 
         assert result
-        assert result == {"energies": {"total force_eval": -251.687390311050706}}
+        assert result.data == {"energies": {"total force_eval": -251.687390311050706}}

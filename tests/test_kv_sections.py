@@ -9,7 +9,7 @@ def test_kv_sections():
         result = next(parse_iter(fhandle.read(), matchers=[match_kv_sections]))
 
         assert result
-        assert result == {
+        assert result.data == {
             "cp2k": {
                 "cp2kflags": "libint fftw3 libxc xsmm spglib",
                 "data directory path": "/data/tiziano/cp2k/data",

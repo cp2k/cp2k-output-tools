@@ -1,5 +1,7 @@
+from typing import Optional
+
 import regex as re
-from .common import FLOAT
+from .common import FLOAT, BlockMatch
 
 
 MULLIKEN_POPULATION_ANALYSIS_RE = re.compile(
@@ -45,7 +47,7 @@ MULLIKEN_POPULATION_ANALYSIS_RE = re.compile(
 )
 
 
-def match_mulliken_population_analysis(content):
+def match_mulliken_population_analysis(content: str) -> Optional[BlockMatch]:
     match = MULLIKEN_POPULATION_ANALYSIS_RE.search(content)
 
     if match is None:
@@ -67,17 +69,20 @@ def match_mulliken_population_analysis(content):
                 }
             )
 
-        return {
-            "mulliken population analysis": {
-                "per atom": per_atom,
-                "total": {
-                    "population alpha": float(captures["total_population_alpha"][0]),
-                    "population beta": float(captures["total_population_beta"][0]),
-                    "charge": float(captures["total_charge"][0]),
-                    "spin": float(captures["total_spin"][0]),
-                },
-            }
-        }
+        return BlockMatch(
+            {
+                "mulliken population analysis": {
+                    "per atom": per_atom,
+                    "total": {
+                        "population alpha": float(captures["total_population_alpha"][0]),
+                        "population beta": float(captures["total_population_beta"][0]),
+                        "charge": float(captures["total_charge"][0]),
+                        "spin": float(captures["total_spin"][0]),
+                    },
+                }
+            },
+            match.spans(0),
+        )
 
     # spin-restricted case:
     for idx in range(len(captures["atom"])):
@@ -90,9 +95,12 @@ def match_mulliken_population_analysis(content):
             }
         )
 
-    return {
-        "mulliken population analysis": {
-            "per atom": per_atom,
-            "total": {"population": float(captures["total_population"][0]), "charge": float(captures["total_charge"][0])},
-        }
-    }
+    return BlockMatch(
+        {
+            "mulliken population analysis": {
+                "per atom": per_atom,
+                "total": {"population": float(captures["total_population"][0]), "charge": float(captures["total_charge"][0])},
+            }
+        },
+        match.spans(0),
+    )

@@ -11,7 +11,7 @@ def test_start_and_stop():
         result = next(parse_iter(fhandle.read(), matchers=[match_program_info]))
 
         assert result
-        assert result == {
+        assert result.data == {
             "program info": {
                 "started at": "2019-09-17 17:01:19.273",
                 "started on": "tcpc18",
@@ -36,7 +36,7 @@ def test_no_stop():
     with open(TEST_DIR.joinpath("outputs/Si-truncated.out"), "r") as fhandle:
         result = next(parse_iter(fhandle.read(), matchers=[match_program_info]))
         assert result
-        assert result == {
+        assert result.data == {
             "program info": {
                 "started at": "2019-09-17 17:01:19.273",
                 "started on": "tcpc18",

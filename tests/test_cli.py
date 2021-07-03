@@ -66,7 +66,7 @@ def test_cp2kparse_mulliken_yaml(script_runner):
     ryaml = pytest.importorskip("ruamel.yaml")
     yaml = ryaml.YAML()
 
-    ret = script_runner.run("cp2kparse", "-y", str(TEST_DIR.joinpath("outputs/mulliken_unrestricted_snippet.out")))
+    ret = script_runner.run("cp2kparse", "-o", "yaml", str(TEST_DIR.joinpath("outputs/mulliken_unrestricted_snippet.out")))
 
     assert ret.success
     assert ret.stderr == ""

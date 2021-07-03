@@ -1,33 +1,38 @@
-import argparse
 import json
 import sys
 
+import click
+
 from .parser import parse_iter
+from .blocks.common import merged_spans, span_char_count
 
 
-def cp2kparse():
-    parser = argparse.ArgumentParser(description="Parse the CP2K output file and return a JSON")
-    parser.add_argument(
-        "file",
-        metavar="<file>",
-        nargs="?",
-        type=argparse.FileType("r"),
-        default=sys.stdin,
-        help="CP2K output file, stdin if not specified",
-    )
-    parser.add_argument("-y", "--yaml", action="store_true", help="output yaml instead of json")
-    parser.add_argument(
-        "-s", "--safe-keys", action="store_true", help="generate 'safe' key names (e.g. without spaces, dashes, ..)"
-    )
-    parser.add_argument(
-        "-k", "--key", dest="paths", metavar="<path>", type=str, action="append", help="Path, ex.: 'energies/total force_eval'"
-    )
-    args = parser.parse_args()
+@click.command()
+@click.argument("fhandle", metavar="[FILE|-]", type=click.File(), default="-")
+@click.option(
+    "-o",
+    "--format",
+    "oformat",
+    type=click.Choice(("json", "yaml", "highlight")),
+    default="json",
+    help="Output format (json or yaml are structure formats, highlight shows which lines of the output have been matched)",
+)
+@click.option("-s", "--safe-keys", is_flag=True, help="generate 'safe' key names (e.g. without spaces, dashes, ..)")
+@click.option("-S", "--statistics", is_flag=True, help="print some statistics to stderr")
+@click.option("-k", "--key", "paths", metavar="<PATH>", type=str, multiple=True, help="Path, ex.: 'energies/total force_eval'")
+def cp2kparse(fhandle, oformat, safe_keys, statistics, paths):
+    """Parse the CP2K output FILE and return a structured output"""
 
     tree = {}
+    spans = []
 
-    for match in parse_iter(args.file.read(), key_mangling=args.safe_keys):
-        tree.update(match)
+    content = fhandle.read()
+
+    for match in parse_iter(content, key_mangling=safe_keys):
+        tree.update(match.data)
+        spans += match.spans
+
+    spans = merged_spans(spans)
 
     def _(val):
         if isinstance(val, list):
@@ -35,8 +40,9 @@ def cp2kparse():
 
         return val
 
-    if args.paths:
-        for path in args.paths:
+    if paths:
+        assert oformat != "parsed", "When selecting a specific path to output, json or yaml output format has to be used"
+        for path in paths:
             sections = path.split("/")
             ref = tree
             for section in sections:
@@ -44,15 +50,28 @@ def cp2kparse():
                     section = int(section)  # if we encounter a list, convert the respective path element
                 ref = ref[section]  # exploit Python using references into dicts/lists
 
-            print(f"{path}: {_(ref)}")
+            click.echo(f"{path}: {_(ref)}")
 
         return
 
-    if args.yaml:
+    if oformat == "yaml":
         from ruamel.yaml import YAML
 
         yaml = YAML()
-
         yaml.dump(tree, sys.stdout)
+    elif oformat == "highlight":
+        ptr = 0
+        for start, end in spans:
+            click.secho(content[ptr:start], nl=False, dim=True)
+            click.secho(content[start:end], nl=False, bold=True)
+            ptr = end
+        click.secho(content[ptr:], nl=False, dim=True)
+
     else:
-        print(json.dumps(tree, indent=2, sort_keys=True))
+        click.echo(json.dumps(tree, indent=2, sort_keys=True))
+
+    if statistics:
+        click.echo("Statistics:\n===========\n", err=True)
+        click.echo(f"Number of lines:      {len(content.splitlines()):>8}", err=True)
+        click.echo(f"Number of characters: {len(content):>8}", err=True)
+        click.echo(f"Percentage parsed:    {100*span_char_count(spans)/len(content):>8.2f}", err=True)

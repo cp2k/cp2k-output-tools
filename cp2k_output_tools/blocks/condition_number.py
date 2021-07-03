@@ -1,5 +1,6 @@
+from typing import Optional
 import regex as re
-from .common import FLOAT
+from .common import FLOAT, BlockMatch
 
 
 OVERLAP_MATRIX_CONDITION_NUMBER_RE = re.compile(
@@ -35,7 +36,7 @@ OVERLAP_MATRIX_CONDITION_NUMBER_RE = re.compile(
 )
 
 
-def match_overlap_matrix_condition_number(content):
+def match_overlap_matrix_condition_number(content: str) -> Optional[BlockMatch]:
     match = OVERLAP_MATRIX_CONDITION_NUMBER_RE.search(content)
 
     if match is None:
@@ -43,25 +44,28 @@ def match_overlap_matrix_condition_number(content):
 
     captures = match.groupdict()
 
-    return {
-        "overlap_matrix_condition_number": {
-            "1-norm (estimate)": {
-                "|A|": float(captures["norm1_estimate_A"]),
-                "|A^-1|": float(captures["norm1_estimate_Ainv"]),
-                "CN": float(captures["norm1_estimate"]),
-                "Log(CN)": float(captures["norm1_estimate_log"]),
-            },
-            "1-norm (using diagonalization)": {
-                "|A|": float(captures["norm1_diag_A"]),
-                "|A^-1|": float(captures["norm1_diag_Ainv"]),
-                "CN": float(captures["norm1_diag"]),
-                "Log(CN)": float(captures["norm1_diag_log"]),
-            },
-            "2-norm (using diagonalization)": {
-                "max EV": float(captures["norm2_diag_max_ev"]),
-                "min EV": float(captures["norm2_diag_min_ev"]),
-                "CN": float(captures["norm2_diag"]),
-                "Log(CN)": float(captures["norm2_diag_log"]),
-            },
-        }
-    }
+    return BlockMatch(
+        {
+            "overlap_matrix_condition_number": {
+                "1-norm (estimate)": {
+                    "|A|": float(captures["norm1_estimate_A"]),
+                    "|A^-1|": float(captures["norm1_estimate_Ainv"]),
+                    "CN": float(captures["norm1_estimate"]),
+                    "Log(CN)": float(captures["norm1_estimate_log"]),
+                },
+                "1-norm (using diagonalization)": {
+                    "|A|": float(captures["norm1_diag_A"]),
+                    "|A^-1|": float(captures["norm1_diag_Ainv"]),
+                    "CN": float(captures["norm1_diag"]),
+                    "Log(CN)": float(captures["norm1_diag_log"]),
+                },
+                "2-norm (using diagonalization)": {
+                    "max EV": float(captures["norm2_diag_max_ev"]),
+                    "min EV": float(captures["norm2_diag_min_ev"]),
+                    "CN": float(captures["norm2_diag"]),
+                    "Log(CN)": float(captures["norm2_diag_log"]),
+                },
+            }
+        },
+        match.spans(0),
+    )
