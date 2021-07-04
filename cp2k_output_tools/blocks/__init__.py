@@ -4,6 +4,7 @@ from .program_info import match_program_info
 from .kv_sections import match_kv_sections
 from .energies import match_energies
 from .warnings import match_warnings
+from .forces import match_forces
 
 builtin_matchers = [
     match_overlap_matrix_condition_number,
@@ -11,5 +12,6 @@ builtin_matchers = [
     match_program_info,
     match_kv_sections,
     match_energies,
+    match_forces,
     match_warnings,
 ]

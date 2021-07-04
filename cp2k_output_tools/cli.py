@@ -17,10 +17,17 @@ from .blocks.common import merged_spans, span_char_count
     default="json",
     help="Output format (json or yaml are structure formats, highlight shows which lines of the output have been matched)",
 )
+@click.option(
+    "--color",
+    "color",
+    type=click.Choice(("auto", "always")),
+    default="auto",
+    help="When to colorize output",
+)
 @click.option("-s", "--safe-keys", is_flag=True, help="generate 'safe' key names (e.g. without spaces, dashes, ..)")
 @click.option("-S", "--statistics", is_flag=True, help="print some statistics to stderr")
 @click.option("-k", "--key", "paths", metavar="<PATH>", type=str, multiple=True, help="Path, ex.: 'energies/total force_eval'")
-def cp2kparse(fhandle, oformat, safe_keys, statistics, paths):
+def cp2kparse(fhandle, oformat, color, safe_keys, statistics, paths):
     """Parse the CP2K output FILE and return a structured output"""
 
     tree = {}
@@ -62,10 +69,10 @@ def cp2kparse(fhandle, oformat, safe_keys, statistics, paths):
     elif oformat == "highlight":
         ptr = 0
         for start, end in spans:
-            click.secho(content[ptr:start], nl=False, dim=True)
-            click.secho(content[start:end], nl=False, bold=True)
+            click.secho(content[ptr:start], nl=False, dim=True, color=None if color == "auto" else True)
+            click.secho(content[start:end], nl=False, bold=True, color=None if color == "auto" else True)
             ptr = end
-        click.secho(content[ptr:], nl=False, dim=True)
+        click.secho(content[ptr:], nl=False, dim=True, color=None if color == "auto" else True)
 
     else:
         click.echo(json.dumps(tree, indent=2, sort_keys=True))
