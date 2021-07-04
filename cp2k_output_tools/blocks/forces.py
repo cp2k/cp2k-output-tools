@@ -52,4 +52,7 @@ def match_forces(content: str) -> Optional[BlockMatch]:
         forces[ftype] = {"unit": match["unit"], "per_atom": per_atom, "sum": fsum}
         spans += match.spans(0)
 
+    if not forces:
+        return None
+
     return BlockMatch({"forces": forces}, spans)
