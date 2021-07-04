@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Dict, Any
 import regex as re
 
 from .common import BlockMatch
@@ -20,7 +20,7 @@ KV_SECTION_RE = re.compile(
 
 
 def match_kv_sections(content: str) -> Optional[BlockMatch]:
-    result = {}
+    result: Dict[str, Any] = {}
     spans = []
 
     subsections = {"dft": ("cutoffs",), "qs": ("multi grid cutoff [a.u.]", "interaction thresholds")}

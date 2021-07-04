@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Dict, Any
 import regex as re
 
 from .common import BlockMatch
@@ -21,7 +21,7 @@ TOTAL_WARNING_COUNT_RE = re.compile(
 
 
 def match_warnings(content: str) -> Optional[BlockMatch]:
-    result = {"warnings": []}
+    result: Dict[str, Any] = {"warnings": []}
     spans = []
 
     for wmatch in WARNING_MESSAGE_RE.finditer(content):
