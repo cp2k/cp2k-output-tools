@@ -10,7 +10,7 @@ from .blocks.common import merged_spans, span_char_count
 @click.command()
 @click.argument("fhandle", metavar="[FILE|-]", type=click.File(), default="-")
 @click.option(
-    "-o",
+    "-f",
     "--format",
     "oformat",
     type=click.Choice(("json", "yaml", "highlight")),
