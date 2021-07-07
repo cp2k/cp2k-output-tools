@@ -1,9 +1,9 @@
 import pytest
 
-from . import TEST_DIR
-
-from cp2k_output_tools.parser import parse_iter
 from cp2k_output_tools.blocks import match_mulliken_population_analysis
+from cp2k_output_tools.parser import parse_iter
+
+from . import TEST_DIR
 
 
 def test_mulliken_unrestricted():

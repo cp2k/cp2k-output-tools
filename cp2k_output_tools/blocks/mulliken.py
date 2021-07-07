@@ -1,8 +1,8 @@
 from typing import Optional
 
 import regex as re
-from .common import FLOAT, BlockMatch
 
+from .common import FLOAT, BlockMatch
 
 MULLIKEN_POPULATION_ANALYSIS_RE = re.compile(
     rf"""

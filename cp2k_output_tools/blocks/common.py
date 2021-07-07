@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Dict, Any, List, Union, Tuple
+from typing import Any, Dict, List, Tuple, Union
 
 # floating point regex
 FLOAT = r"[\+\-]?(\d*[\.]\d+|\d+[\.]?\d*)([Ee][\+\-]?\d+)?"

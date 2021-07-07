@@ -1,7 +1,7 @@
-from typing import List, Iterator, Callable
+from typing import Callable, Iterator, List
 
 from .blocks import builtin_matchers
-from .blocks.common import safe_string, BlockMatch
+from .blocks.common import BlockMatch, safe_string
 
 
 def _mangled_keys(idict, mangle_func):

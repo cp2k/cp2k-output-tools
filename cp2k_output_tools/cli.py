@@ -3,8 +3,8 @@ import sys
 
 import click
 
-from .parser import parse_iter
 from .blocks.common import merged_spans, span_char_count
+from .parser import parse_iter
 
 
 @click.command()

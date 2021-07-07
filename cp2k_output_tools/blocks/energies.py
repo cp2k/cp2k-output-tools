@@ -1,4 +1,5 @@
 from typing import Optional
+
 import regex as re
 
 from .common import FLOAT, BlockMatch

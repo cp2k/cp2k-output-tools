@@ -1,6 +1,6 @@
-from . import TEST_DIR
-
 from cp2k_output_tools.parser import parse_iter
+
+from . import TEST_DIR
 
 
 def _key_iter(idict):

@@ -1,7 +1,6 @@
-from . import TEST_DIR
-
-
 from cp2k_output_tools.trajectories import xyz
+
+from . import TEST_DIR
 
 
 def test_parse():

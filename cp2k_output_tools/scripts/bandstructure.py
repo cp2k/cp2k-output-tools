@@ -4,11 +4,11 @@ Convert the CP2K band structure output to CSV files
 
 __all__ = ["SpecialPoint", "Point", "set_gen"]
 
-import re
 import argparse
+import itertools
+import re
 from dataclasses import dataclass
 from typing import List, Optional
-import itertools
 
 
 @dataclass

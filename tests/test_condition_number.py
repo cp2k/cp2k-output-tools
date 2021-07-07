@@ -1,7 +1,7 @@
-from . import TEST_DIR
-
-from cp2k_output_tools.parser import parse_iter
 from cp2k_output_tools.blocks import match_overlap_matrix_condition_number
+from cp2k_output_tools.parser import parse_iter
+
+from . import TEST_DIR
 
 
 def test_condition_number():
