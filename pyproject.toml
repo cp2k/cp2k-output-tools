@@ -30,7 +30,7 @@ yaml = ["ruamel.yaml"]
 pytest = "^6.0"
 codecov = "^2.0.15"
 pytest-cov = "^2.7.1"
-pytest-console-scripts = "^1.0.0"
+pytest-console-scripts = "^1.2.0"
 
 [tool.poetry.scripts]
 cp2kparse = 'cp2k_output_tools.cli:cp2kparse'
