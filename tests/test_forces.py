@@ -9,7 +9,7 @@ def test_energies():
         result = next(parse_iter(fhandle.read(), matchers=[match_forces]))
 
         assert result
-        assert result.data == {
+        assert result == {
             "forces": {
                 "atomic": {
                     "per_atom": [

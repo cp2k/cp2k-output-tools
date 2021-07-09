@@ -11,7 +11,7 @@ def test_mulliken_unrestricted():
         result = next(parse_iter(fhandle.read(), matchers=[match_mulliken_population_analysis]))
 
         assert result
-        assert result.data == {
+        assert result == {
             "mulliken population analysis": {
                 "per atom": [
                     {
@@ -41,7 +41,7 @@ def test_mulliken_restricted():
         result = next(parse_iter(fhandle.read(), matchers=[match_mulliken_population_analysis]))
 
         assert result
-        assert result.data == {
+        assert result == {
             "mulliken population analysis": {
                 "per atom": [
                     {"element": "Si", "kind": 1, "population": 3.999993, "charge": 7e-06},

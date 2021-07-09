@@ -9,7 +9,7 @@ def test_kv_sections():
         result = next(parse_iter(fhandle.read(), matchers=[match_kv_sections]))
 
         assert result
-        assert result.data == {
+        assert result == {
             "cp2k": {
                 "cp2kflags": "libint fftw3 libxc xsmm spglib",
                 "data directory path": "/data/tiziano/cp2k/data",
@@ -96,6 +96,5 @@ def test_kv_sections_cp2kflags_line_cont():
 
         assert result
         assert (
-            result.data["cp2k"]["cp2kflags"]
-            == "omp libint fftw3 libxc parallel mpi3 scalapack cosma xsmm spglib sirius libvori libbqb"
+            result["cp2k"]["cp2kflags"] == "omp libint fftw3 libxc parallel mpi3 scalapack cosma xsmm spglib sirius libvori libbqb"
         )

@@ -4,7 +4,7 @@ import sys
 import click
 
 from .blocks.common import merged_spans, span_char_count
-from .parser import parse_iter
+from .parser import parse_iter_blocks
 
 
 @click.command()
@@ -35,7 +35,7 @@ def cp2kparse(fhandle, oformat, color, safe_keys, statistics, paths):
 
     content = fhandle.read()
 
-    for match in parse_iter(content, key_mangling=safe_keys):
+    for match in parse_iter_blocks(content, key_mangling=safe_keys):
         tree.update(match.data)
         spans += match.spans
 
