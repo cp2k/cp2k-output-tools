@@ -1,11 +1,12 @@
 import json
+
 import pytest
 
 from . import TEST_DIR
 
 
 def test_cp2kparse_key(script_runner):
-    ret = script_runner.run("cp2kparse", "-k", "energies/total force_eval", str(TEST_DIR.joinpath("inputs/Si.out")))
+    ret = script_runner.run("cp2kparse", "-k", "energies/total force_eval", str(TEST_DIR.joinpath("outputs/Si.out")))
 
     assert ret.success
     assert ret.stderr == ""
@@ -13,12 +14,12 @@ def test_cp2kparse_key(script_runner):
 
 
 def test_cp2kparse_key_safe(script_runner):
-    ret = script_runner.run("cp2kparse", "-k", "energies/total force_eval", "-s", str(TEST_DIR.joinpath("inputs/Si.out")))
+    ret = script_runner.run("cp2kparse", "-k", "energies/total force_eval", "-s", str(TEST_DIR.joinpath("outputs/Si.out")))
 
     assert not ret.success
     assert "KeyError" in ret.stderr
 
-    ret = script_runner.run("cp2kparse", "-k", "energies/total_force_eval", "-s", str(TEST_DIR.joinpath("inputs/Si.out")))
+    ret = script_runner.run("cp2kparse", "-k", "energies/total_force_eval", "-s", str(TEST_DIR.joinpath("outputs/Si.out")))
 
     assert ret.success
     assert ret.stderr == ""
@@ -26,7 +27,7 @@ def test_cp2kparse_key_safe(script_runner):
 
 
 def test_cp2kparse_mulliken(script_runner):
-    ret = script_runner.run("cp2kparse", str(TEST_DIR.joinpath("inputs/mulliken_unrestricted_snippet.out")))
+    ret = script_runner.run("cp2kparse", str(TEST_DIR.joinpath("outputs/mulliken_unrestricted_snippet.out")))
 
     assert ret.success
     assert ret.stderr == ""
@@ -66,7 +67,7 @@ def test_cp2kparse_mulliken_yaml(script_runner):
     ryaml = pytest.importorskip("ruamel.yaml")
     yaml = ryaml.YAML()
 
-    ret = script_runner.run("cp2kparse", "-y", str(TEST_DIR.joinpath("inputs/mulliken_unrestricted_snippet.out")))
+    ret = script_runner.run("cp2kparse", "-f", "yaml", str(TEST_DIR.joinpath("outputs/mulliken_unrestricted_snippet.out")))
 
     assert ret.success
     assert ret.stderr == ""

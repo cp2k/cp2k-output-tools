@@ -1,18 +1,21 @@
 # cp2k-output-tools
 
-[![Build Status](https://github.com/cp2k/cp2k-output-tools/workflows/tests/badge.svg)](https://github.com/cp2k/cp2k-output-tools/actions) [![codecov](https://codecov.io/gh/cp2k/cp2k-output-tools/branch/develop/graph/badge.svg)](https://codecov.io/gh/cp2k/cp2k-output-tools) [![PyPI](https://img.shields.io/pypi/pyversions/cp2k-output-tools)](https://pypi.org/project/cp2k-output-tools/)
+[![Build Status](https://github.com/cp2k/cp2k-output-tools/actions/workflows/test.yml/badge.svg)](https://github.com/cp2k/cp2k-output-tools/actions) [![codecov](https://codecov.io/gh/cp2k/cp2k-output-tools/branch/develop/graph/badge.svg)](https://codecov.io/gh/cp2k/cp2k-output-tools) [![PyPI](https://img.shields.io/pypi/pyversions/cp2k-output-tools)](https://pypi.org/project/cp2k-output-tools/)
 
 Modular CP2K output file parsers, mostly in the form of regular expressions plus other tools to mangle various CP2K output:
 
-  * `cp2kparse` ... parse CP2K output files (for restart & input files look at the [cp2k-input-tools](https://github.com/cp2k/cp2k-input-tools) project)
-  * `xyz_restart_parser` ... when restarts occur during an MD you may end up with duplicated frames in the trajectory, this tool filters them
+  * `cp2kparse` ... parse CP2K output (for restart & input files look at the [cp2k-input-tools](https://github.com/cp2k/cp2k-input-tools) project) and allow easy selection of common values.
+  * `xyz_restart_parser` ... when restarts occur during an MD you may end up with duplicated frames in the trajectory, this tool filters them (and can easily handle huge files)
   * `cp2k_bs2csv` ... convert a CP2K band structure file to multiple (one-per-set) CSV files for easier plotting. There is also an API available if you need to import bandstructure data into your application.
-  * `cp2k_pdos` ... bring CP2Ks PDOS dump into a more CSV-like form for easier plotting/parsing
+  * `cp2k_pdos` ... apply a convolution with Gaussians on a regular grid on the CP2K PDOS output and generate a CSV file for further processing or plotting. The same grid is used for all input files with the min/max of the grid automatically determined, but no summation of the different projections is done.
 
 ## Requirements
 
 * Python 3.6+
-* regex 2020+
+* regex 2021+
+* click 8+
+* numpy 1.19+
+* optional: ruamel.yaml
 
 For development: https://poetry.eustace.io/ https://pytest.org/
 
@@ -23,18 +26,21 @@ There is a simple command-line interface `cp2kparse`:
 
 ```console
 $ cp2kparse --help
-usage: cp2kparse [-h] [-y] [-k <path>] [<file>]
+Usage: cp2kparse [OPTIONS] [FILE|-]
 
-Parse the CP2K output file and return a JSON
+  Parse the CP2K output FILE and return a structured output
 
-positional arguments:
-  <file>                CP2K output file, stdin if not specified
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -y, --yaml            output yaml instead of json
-  -k <path>, --key <path>
-                        Path, ex.: 'energies/total force_eval'
+Options:
+  -f, --format [json|yaml|highlight]
+                                  Output format (json or yaml are structure
+                                  formats, highlight shows which lines of the
+                                  output have been matched)
+  --color [auto|always]           When to colorize output
+  -s, --safe-keys                 generate 'safe' key names (e.g. without
+                                  spaces, dashes, ..)
+  -S, --statistics                print some statistics to stderr
+  -k, --key <PATH>                Path, ex.: 'energies/total force_eval'
+  --help                          Show this message and exit.
 
 $ cp2kparse calc.out
 {
@@ -504,6 +510,41 @@ with open("calc.out", "r") as fhandle:
 $ xyz_restart_cleaner orig_trajectory.xyz new_trajectory.xyz
 found restart point @1, dropping 1 frames, flushing 1
 flushing remaining 2 frames
+```
+
+## Usage: cp2k_bs2csv
+
+Given a `.bs` file as written by CP2K the script will generate CSV files with the same name and suffixes `.set-X.csv` in the same directory as the source file:
+
+```console
+$ cp2k_bs2csv WO3.bs
+writing point set WO3.bs.set-1.csv (total number of k-points: 11)
+with the following special points:
+     GAMMA: 0.00000000 / 0.00000000 / 0.00000000
+         X: 0.00000000 / 0.50000000 / 0.00000000
+writing point set WO3.bs.set-2.csv (total number of k-points: 11)
+with the following special points:
+         X: 0.00000000 / 0.50000000 / 0.00000000
+         M: 0.50000000 / 0.50000000 / 0.00000000
+writing point set WO3.bsset-3.csv (total number of k-points: 11)
+with the following special points:
+         M: 0.50000000 / 0.50000000 / 0.00000000
+     GAMMA: 0.00000000 / 0.00000000 / 0.00000000
+writing point set WO3.bs.set-4.csv (total number of k-points: 11)
+with the following special points:
+     GAMMA: 0.00000000 / 0.00000000 / 0.00000000
+         R: 0.50000000 / 0.50000000 / 0.50000000
+writing point set WO3.bs.set-5.csv (total number of k-points: 11)
+with the following special points:
+         R: 0.50000000 / 0.50000000 / 0.50000000
+         X: 0.00000000 / 0.50000000 / 0.00000000
+writing point set WO3.bs.set-6.csv (total number of k-points: 11)
+with the following special points:
+         R: 0.50000000 / 0.50000000 / 0.50000000
+         M: 0.50000000 / 0.50000000 / 0.00000000
+$ ls
+WO3.cp2k-8.bs            WO3.cp2k-8.bs.set-2.csv  WO3.cp2k-8.bs.set-4.csv  WO3.cp2k-8.bs.set-6.csv
+WO3.cp2k-8.bs.set-1.csv  WO3.cp2k-8.bs.set-3.csv  WO3.cp2k-8.bs.set-5.csv
 ```
 
 ## Development

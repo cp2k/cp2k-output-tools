@@ -1,4 +1,8 @@
+from typing import Optional
+
 import regex as re
+
+from .common import BlockMatch
 
 PROGRAM_INFO_START_RE = re.compile(
     r"""
@@ -47,7 +51,8 @@ PROGRAM_INFO_STOP_RE = re.compile(
 )
 
 
-def match_program_info(content):
+def match_program_info(content: str) -> Optional[BlockMatch]:
+    spans = []
     match = PROGRAM_INFO_START_RE.search(content)
 
     if not match:
@@ -58,6 +63,7 @@ def match_program_info(content):
 
     result = dict(zip([k.lower() for k in keys], values))
     result[match["inkey"].lower()] = "".join(match.captures("invalue"))
+    spans += match.spans(0)
 
     match = PROGRAM_INFO_STOP_RE.search(content)
 
@@ -67,5 +73,6 @@ def match_program_info(content):
 
         result.update(zip([k.lower() for k in keys], values))
         result[match["inkey"].lower()] = "".join(match.captures("invalue"))
+        spans += match.spans(0)
 
-    return {"program info": result}
+    return BlockMatch({"program info": result}, spans)

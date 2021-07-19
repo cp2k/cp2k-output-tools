@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "cp2k-output-tools"
-version = "0.3.1"
+version = "0.4.0"
 description = "Python tools to handle CP2K output files"
 authors = ["Tiziano Müller <tiziano.mueller@chem.uzh.ch>"]
 repository = "https://github.com/cp2k/cp2k-output-tools"
@@ -17,10 +17,11 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.6"
-regex = "^2020.1"
-"ruamel.yaml" = {version = "^0.16.5", optional = true}
-dataclasses = {version = "^0.7", python = "~3.6"}
+regex = ">=2021.4,<2022.0"
+"ruamel.yaml" = {version = ">=0.16.5,<0.18.0", optional = true}
+dataclasses = {version = ">=0.7,~0", python = "~3.6"}
 numpy = "^1.19"
+click = "^8.0.1"
 
 [tool.poetry.extras]
 yaml = ["ruamel.yaml"]
@@ -29,7 +30,7 @@ yaml = ["ruamel.yaml"]
 pytest = "^6.0"
 codecov = "^2.0.15"
 pytest-cov = "^2.7.1"
-pytest-console-scripts = "^0.2.0"
+pytest-console-scripts = "^1.2.0"
 
 [tool.poetry.scripts]
 cp2kparse = 'cp2k_output_tools.cli:cp2kparse'

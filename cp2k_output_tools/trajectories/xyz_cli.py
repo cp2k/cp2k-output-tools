@@ -1,8 +1,8 @@
-import sys
-import re
-import contextlib
 import argparse
+import contextlib
 import mmap
+import re
+import sys
 
 from .xyz import FRAME_MATCH_REGEX
 

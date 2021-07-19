@@ -9,13 +9,12 @@ pass both files as arguments to get one common grid for both of them.
 # based on a Fortran tool written by Marcella Iannuzzi <marcella.iannuzzi@chem.uzh.ch>
 
 
-import sys
-import re
 import argparse
 import contextlib
+import re
+import sys
 
 import numpy as np
-
 
 HEADER_MATCH = re.compile(
     r"\# Projected DOS for (?:atomic kind \w+|list \d+ of \d+ atoms,)"

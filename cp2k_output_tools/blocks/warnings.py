@@ -1,5 +1,8 @@
+from typing import Any, Dict, Optional
+
 import regex as re
 
+from .common import BlockMatch
 
 WARNING_MESSAGE_RE = re.compile(
     r"""
@@ -17,16 +20,19 @@ TOTAL_WARNING_COUNT_RE = re.compile(
 )
 
 
-def match_warnings(content):
-    result = {"warnings": []}
+def match_warnings(content: str) -> Optional[BlockMatch]:
+    result: Dict[str, Any] = {"warnings": []}
+    spans = []
 
     for wmatch in WARNING_MESSAGE_RE.finditer(content):
         result["warnings"] += [
             {"filename": wmatch["filename"], "line": int(wmatch["line"]), "message": "".join(wmatch.captures("message")).rstrip()}
         ]
+        spans += wmatch.spans(0)
 
     match = TOTAL_WARNING_COUNT_RE.search(content)
     if match:
         result["nwarnings"] = int(match["value"])
+        spans += match.spans(0)
 
-    return result
+    return BlockMatch(result, spans)

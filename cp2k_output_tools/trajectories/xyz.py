@@ -1,8 +1,7 @@
+import contextlib
 import mmap
 import re
-import contextlib
 from collections.abc import Iterator
-
 
 __all__ = ["parse", "parse_iter", "BlockIterator"]
 

@@ -1,3 +1,12 @@
+## [0.4.0] - 2021-07-19
+
+* cp2kparse/api: can now parse forces
+* cp2kparse: gained a highlight mode to show what gets matched
+* cp2kparse: moved to click for providing the CLI to improve UX
+* cp2kparse/api: fix bug with parsing line continued kv
+* api: introduced BlockMatch to provide more info about the match (like the char span)
+* cp2k_bs2csv: generate files in CWD rather than in source dir
+
 ## [0.3.1] - 2020-09-09
 
 * cp2k_pdos: add support for list-of-atoms output

@@ -1,11 +1,11 @@
-from . import TEST_DIR
-
-from cp2k_output_tools.parser import parse_iter
 from cp2k_output_tools.blocks import match_kv_sections
+from cp2k_output_tools.parser import parse_iter
+
+from . import TEST_DIR
 
 
 def test_kv_sections():
-    with open(TEST_DIR.joinpath("inputs/Si.out"), "r") as fhandle:
+    with open(TEST_DIR.joinpath("outputs/Si.out"), "r") as fhandle:
         result = next(parse_iter(fhandle.read(), matchers=[match_kv_sections]))
 
         assert result
@@ -86,3 +86,15 @@ def test_kv_sections():
                 "relative density cutoff [a.u.]": 20.0,
             },
         }
+
+
+def test_kv_sections_cp2kflags_line_cont():
+    """check the line continued cp2kflags are parsed correctly"""
+
+    with TEST_DIR.joinpath("outputs/Si_bulk8.out").open() as fhandle:
+        result = next(parse_iter(fhandle.read(), matchers=[match_kv_sections]))
+
+        assert result
+        assert (
+            result["cp2k"]["cp2kflags"] == "omp libint fftw3 libxc parallel mpi3 scalapack cosma xsmm spglib sirius libvori libbqb"
+        )

@@ -1,20 +1,28 @@
+from typing import Any, Dict, Optional
+
 import regex as re
+
+from .common import BlockMatch
 
 KV_SECTION_RE = re.compile(
     r"""
 ^\ (
-    (?P<section>CP2K|)\|\ (?P<key>cp2kflags)\: \s*(?P<value>.+?) \s*
-    |
-    (?P<section>CP2K|GLOBAL|DBCSR|DFT|QS)\|\ (?P<key>\s*\w.+?):?\ {2,}(?P<value>.+)
+    (
+        (?P<section>CP2K)\|\ (?P<key>cp2kflags)\: \s*(?P<value>.+?) \s* \n
+        (?:\ CP2K\|\s{12} (?P<value>.+?) \s* \n)*
     )
-\n
+    |
+    (?P<section>\L<sections>)\|\ (?P<key>\s*\w.+?):?\ {2,}(?P<value>.+) \n
+    )
 """,
-    re.VERBOSE | re.MULTILINE,
+    re.VERSION1 | re.VERBOSE | re.MULTILINE,
+    sections=["CP2K", "GLOBAL", "DBCSR", "DFT", "QS"],
 )
 
 
-def match_kv_sections(content):
-    result = {}
+def match_kv_sections(content: str) -> Optional[BlockMatch]:
+    result: Dict[str, Any] = {}
+    spans = []
 
     subsections = {"dft": ("cutoffs",), "qs": ("multi grid cutoff [a.u.]", "interaction thresholds")}
 
@@ -39,7 +47,9 @@ def match_kv_sections(content):
             # otherwise we have regular keywords again
             rpointer = result[section]
 
-        value = match["value"]
+        # for line continued values we get a list of captured values, rejoin them here
+        value = "".join(match.captures("value"))
+        spans += match.spans(0)
 
         if value in ["T", "F"]:
             rpointer[key] = True if value == "T" else False
@@ -62,4 +72,4 @@ def match_kv_sections(content):
     if not result:
         return None
 
-    return result
+    return BlockMatch(result, spans)

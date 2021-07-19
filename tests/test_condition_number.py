@@ -1,11 +1,11 @@
-from . import TEST_DIR
-
-from cp2k_output_tools.parser import parse_iter
 from cp2k_output_tools.blocks import match_overlap_matrix_condition_number
+from cp2k_output_tools.parser import parse_iter
+
+from . import TEST_DIR
 
 
 def test_condition_number():
-    with open(TEST_DIR.joinpath("inputs/overlap_condition_snippet.out"), "r") as fhandle:
+    with open(TEST_DIR.joinpath("outputs/overlap_condition_snippet.out"), "r") as fhandle:
         result = next(parse_iter(fhandle.read(), matchers=[match_overlap_matrix_condition_number]))
 
         assert result
