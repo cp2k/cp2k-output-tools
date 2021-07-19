@@ -23,18 +23,21 @@ There is a simple command-line interface `cp2kparse`:
 
 ```console
 $ cp2kparse --help
-usage: cp2kparse [-h] [-y] [-k <path>] [<file>]
+Usage: cp2kparse [OPTIONS] [FILE|-]
 
-Parse the CP2K output file and return a JSON
+  Parse the CP2K output FILE and return a structured output
 
-positional arguments:
-  <file>                CP2K output file, stdin if not specified
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -y, --yaml            output yaml instead of json
-  -k <path>, --key <path>
-                        Path, ex.: 'energies/total force_eval'
+Options:
+  -f, --format [json|yaml|highlight]
+                                  Output format (json or yaml are structure
+                                  formats, highlight shows which lines of the
+                                  output have been matched)
+  --color [auto|always]           When to colorize output
+  -s, --safe-keys                 generate 'safe' key names (e.g. without
+                                  spaces, dashes, ..)
+  -S, --statistics                print some statistics to stderr
+  -k, --key <PATH>                Path, ex.: 'energies/total force_eval'
+  --help                          Show this message and exit.
 
 $ cp2kparse calc.out
 {
