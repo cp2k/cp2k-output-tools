@@ -12,7 +12,10 @@ Modular CP2K output file parsers, mostly in the form of regular expressions plus
 ## Requirements
 
 * Python 3.6+
-* regex 2020+
+* regex 2021+
+* click 8+
+* numpy 1.19+
+* optional: ruamel.yaml
 
 For development: https://poetry.eustace.io/ https://pytest.org/
 
