@@ -1,4 +1,6 @@
 import json
+import os
+import pathlib
 import sys
 
 import click
@@ -82,3 +84,47 @@ def cp2kparse(fhandle, oformat, color, safe_keys, statistics, paths):
         click.echo(f"Number of lines:      {len(content.splitlines()):>8}", err=True)
         click.echo(f"Number of characters: {len(content):>8}", err=True)
         click.echo(f"Percentage parsed:    {100*span_char_count(spans)/len(content):>8.2f}", err=True)
+
+
+@click.command()
+@click.argument("fhandle", metavar="[BANDSTRUCTURE_FILE|-]", type=click.File(), default="-")
+@click.option(
+    "-p",
+    "--output-pattern",
+    type=str,
+    help="The output pattern for the different set files",
+    default="{bsfile_basename}.set-{setnr}.csv",
+    show_default=True,
+)
+@click.option(
+    "-C",
+    "--output-dir",
+    type=click.Path(exists=True, file_okay=False, writable=True, path_type=pathlib.Path),
+    help="Directory in which to create the CSV files",
+    default=".",
+    show_default=True,
+)
+def cp2k_bs2csv(fhandle, output_pattern, output_dir):
+    """
+    Convert the input from the given BANDSTRUCTURE_FILE (or stdin) and write
+    CSV output files based on the given pattern.
+    """
+    from cp2k_output_tools.bandstructure_parser import set_gen
+
+    content = fhandle.read()
+
+    for setnr, npoints, _, specialpoints, points in set_gen(content):
+        filename = output_pattern.format(bsfile_basename=os.path.basename(fhandle.name), setnr=setnr)
+
+        print(f"writing point set {filename} (total number of k-points: {npoints})")
+        with output_dir.joinpath(filename).open("w") as csvout:
+            print("with the following special points:")
+
+            for point in specialpoints:
+                print(f"  {point.name:>8}: {point.a:10.8f} / {point.b:10.8f} / {point.c:10.8f}")
+
+            for point in points:
+                csvout.write(f"{point.a:10.8f} {point.b:10.8f} {point.c:10.8f}")
+                for value in point.bands:
+                    csvout.write(f" {value:10.8f}")
+                csvout.write("\n")
