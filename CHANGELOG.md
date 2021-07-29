@@ -1,3 +1,10 @@
+## [0.5.0] - 2021-07-29
+
+* cp2kparse: parse SIRIUS warnings & errors
+* cp2kparse: parse DOI for automated citation generation
+* bandstructure_parse: add API (based on cp2k_bs2csv script)
+* cp2k_bs2csv: move to cli and use click (adds output dir option)
+
 ## [0.4.0] - 2021-07-19
 
 * cp2kparse/api: can now parse forces
