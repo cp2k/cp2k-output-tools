@@ -1,3 +1,4 @@
+from .bibliography import match_bibliography
 from .condition_number import match_overlap_matrix_condition_number
 from .energies import match_energies
 from .forces import match_forces
@@ -14,4 +15,5 @@ builtin_matchers = [
     match_energies,
     match_forces,
     match_warnings,
+    match_bibliography,
 ]
