@@ -11,14 +11,7 @@ from dataclasses import dataclass
 from decimal import Decimal
 from typing import Iterator, List, Optional, Tuple
 
-
-@dataclass
-class SpecialPoint:
-    number: int
-    name: str
-    a: Decimal
-    b: Decimal
-    c: Decimal
+from .blocks.kpoints import POINTS_MATCH, POINTS_MATCH8
 
 
 @dataclass
@@ -29,6 +22,15 @@ class Point:
     bands: List[Decimal]
     spin: int
     weight: Optional[Decimal] = None
+
+
+@dataclass
+class SpecialPoint:
+    number: int
+    name: str
+    a: Decimal
+    b: Decimal
+    c: Decimal
 
 
 @dataclass
@@ -57,21 +59,6 @@ SPOINTS_MATCH = re.compile(
     r"""
 [ ]*
   POINT [ ]+ (?P<number>\d+) [ ]+ (?P<name>\S+) [ ]+ (?P<a>\S+) [ ]+ (?P<b>\S+) [ ]+ (?P<c>\S+)
-""",
-    re.VERBOSE,
-)
-
-POINTS_MATCH = re.compile(
-    r"""
-[ ]*
-  Nr\. [ ]+ (?P<nr>\d+) [ ]+
-  Spin [ ]+ (?P<spin>\d+) [ ]+
-  K-Point [ ]+ (?P<a>\S+) [ ]+ (?P<b>\S+) [ ]+ (?P<c>\S+) [ ]*
-  \n
-[ ]* (?P<npoints>\d+) [ ]* \n
-(?P<bands>
-  [\s\S]*?(?=\n.*?[ ] Nr|$)  # match everything until next 'Nr.' or EOL
-)
 """,
     re.VERBOSE,
 )
@@ -107,18 +94,6 @@ SET_MATCH8 = re.compile(
 SPOINTS_MATCH8 = re.compile(
     r"""
 \#\s+ Special\ point\ (?P<number>\d+) \s+ (?P<a>\S+) \s+ (?P<b>\S+) \s+ (?P<c>\S+) \s+ (?P<name>\S+)
-""",
-    re.VERBOSE,
-)
-
-
-POINTS_MATCH8 = re.compile(
-    r"""
-\#\ \ Point\ (?P<nr>\d+)\s+ Spin\ (?P<spin>\d+): \s+ (?P<a>\S+) \s+ (?P<b>\S+) \s+ (?P<c>\S+) [ ]* ((?P<weight>\S+) [ ]*)? \n
-\#\ \ \ Band \s+ Energy\ \[eV\] \s+ Occupation \s*
-(?P<bands>
-  [\s\S]*?(?=\n.*?\#\ \ Point|$)  # match everything until next '# Point' or EOL
-)
 """,
     re.VERBOSE,
 )

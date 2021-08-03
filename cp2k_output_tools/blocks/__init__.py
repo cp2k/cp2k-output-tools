@@ -2,6 +2,7 @@ from .bibliography import match_bibliography
 from .condition_number import match_overlap_matrix_condition_number
 from .energies import match_energies
 from .forces import match_forces
+from .kpoints import match_kpoints
 from .kv_sections import match_kv_sections
 from .mulliken import match_mulliken_population_analysis
 from .program_info import match_program_info
@@ -16,4 +17,5 @@ builtin_matchers = [
     match_forces,
     match_warnings,
     match_bibliography,
+    match_kpoints,
 ]
