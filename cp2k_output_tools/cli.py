@@ -6,6 +6,7 @@ import sys
 import click
 
 from .blocks.common import merged_spans, span_char_count
+from .levelparser import parse_iter
 from .parser import parse_iter_blocks
 
 
@@ -29,13 +30,32 @@ from .parser import parse_iter_blocks
 @click.option("-s", "--safe-keys", is_flag=True, help="generate 'safe' key names (e.g. without spaces, dashes, ..)")
 @click.option("-S", "--statistics", is_flag=True, help="print some statistics to stderr")
 @click.option("-k", "--key", "paths", metavar="<PATH>", type=str, multiple=True, help="Path, ex.: 'energies/total force_eval'")
-def cp2kparse(fhandle, oformat, color, safe_keys, statistics, paths):
+@click.option("--experimental", is_flag=True, help="Use the experimental level parser", default=False)
+def cp2kparse(fhandle, oformat, color, safe_keys, statistics, paths, experimental):
     """Parse the CP2K output FILE and return a structured output"""
 
     tree = {}
     spans = []
 
     content = fhandle.read()
+
+    if experimental:
+        for prog_level in parse_iter(content):
+            print(prog_level)
+            if prog_level.data:
+                for data in prog_level.data:
+                    print(" " * 4 * 1, data)
+            for sublevel in prog_level.sublevels:
+                print(" " * 4 * 1, sublevel)
+                if sublevel.data:
+                    for data in sublevel.data:
+                        print(" " * 4 * 2, data)
+                for subsublevel in sublevel.sublevels:
+                    print(" " * 4 * 2, subsublevel)
+                    if subsublevel.data:
+                        for data in subsublevel.data:
+                            print(" " * 4 * 3, data)
+        return
 
     for match in parse_iter_blocks(content, key_mangling=safe_keys):
         tree.update(match.data)

@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 from dataclasses import dataclass
-from typing import Any, Dict, List, Tuple, Union
+from typing import Any, Dict, Iterator, List, Tuple, Union
 
 # floating point regex
 FLOAT = r"[\+\-]?(\d*[\.]\d+|\d+[\.]?\d*)([Ee][\+\-]?\d+)?"
@@ -44,3 +46,10 @@ def merged_spans(spans: List[Tuple[int, int]]):
 
 def span_char_count(spans: List[Tuple[int, int]]):
     return sum(end - start for start, end in spans)
+
+
+@dataclass
+class Level:
+    name: str
+    data: Iterator[Any]
+    sublevels: Iterator[Level]
