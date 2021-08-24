@@ -50,6 +50,25 @@ def span_char_count(spans: List[Tuple[int, int]]):
 
 @dataclass
 class Level:
-    name: str
-    data: Iterator[Any]
-    sublevels: Iterator[Level]
+    sublevels: List[Level]
+
+
+@dataclass
+class Tree:
+    levels: List[Level]
+
+    def walk(self) -> Iterator[Tuple[int, Level]]:
+        """Walk the tree, returns a tuple of current level and the level object."""
+        stack = self.levels[::-1]
+        lvl = [len(self.levels)]
+
+        while stack:
+            current = stack.pop()
+            yield (len(lvl), current)
+            lvl[-1] -= 1
+
+            stack += current.sublevels[::-1]
+            lvl.append(len(current.sublevels))
+
+            while lvl and lvl[-1] == 0:  # done with the current level?
+                lvl.pop()

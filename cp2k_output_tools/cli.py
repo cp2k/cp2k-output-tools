@@ -6,7 +6,7 @@ import sys
 import click
 
 from .blocks.common import merged_spans, span_char_count
-from .levelparser import parse_iter
+from .levelparser import parse_all, pretty_print
 from .parser import parse_iter_blocks
 
 
@@ -40,21 +40,9 @@ def cp2kparse(fhandle, oformat, color, safe_keys, statistics, paths, experimenta
     content = fhandle.read()
 
     if experimental:
-        for prog_level in parse_iter(content):
-            print(prog_level)
-            if prog_level.data:
-                for data in prog_level.data:
-                    print(" " * 4 * 1, data)
-            for sublevel in prog_level.sublevels:
-                print(" " * 4 * 1, sublevel)
-                if sublevel.data:
-                    for data in sublevel.data:
-                        print(" " * 4 * 2, data)
-                for subsublevel in sublevel.sublevels:
-                    print(" " * 4 * 2, subsublevel)
-                    if subsublevel.data:
-                        for data in subsublevel.data:
-                            print(" " * 4 * 3, data)
+        tree = parse_all(content)
+        for lvl, data in tree.walk():
+            pretty_print(data, " " * 4 * (lvl - 1))
         return
 
     for match in parse_iter_blocks(content, key_mangling=safe_keys):

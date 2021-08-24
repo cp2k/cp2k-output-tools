@@ -1,11 +1,16 @@
 """This is the level-based parser, allowing to correctly parse arbitrarily nested CP2K output"""
 
 import re
-from itertools import chain
-from typing import Iterator, Optional
+from dataclasses import dataclass
+from functools import singledispatch
+from typing import Optional
 
-from .blocks.common import Level
-from .blocks.geo_opt import match_geo_opt
+from .blocks.common import Level, Tree
+from .blocks.geo_opt import (
+    GeometryOptimization,
+    GeometryOptimizationStep,
+    match_geo_opt,
+)
 
 PROG_START_MATCH = re.compile(
     r"""
@@ -24,10 +29,44 @@ PROG_START_MATCH = re.compile(
 )
 
 
-def parse_iter(content: str, start: Optional[int] = 0, end: Optional[int] = 0) -> Iterator[Level]:
-    # Since a program can terminate in many ways but only start with a few,
-    # let's determine end of a program run output by looking for the beginning of the next.
-    # This assumes that we only find output of CP2K in content.
+@dataclass
+class CP2KRun(Level):
+    pass
+
+
+@singledispatch
+def pretty_print(level, indent=""):
+    pass
+
+
+@pretty_print.register
+def _(level: CP2KRun, indent=""):
+    print(f"{indent}CP2K:")
+
+
+@pretty_print.register
+def _(level: GeometryOptimization, indent=""):
+    print(f"{indent}Geometry Optimization:")
+    print(f"{indent}    converged: {level.converged}")
+
+
+@pretty_print.register
+def _(level: GeometryOptimizationStep, indent=""):
+    print(f"{indent}Geometry Optimization Step:")
+    for msg in level.messages:
+        print(f"{indent}    [{msg.type}]: {msg.message}")
+
+
+def parse_all(content: str, start: Optional[int] = 0, end: Optional[int] = 0) -> Tree:
+    levels = []
+
     starts = [match.span()[0] for match in PROG_START_MATCH.finditer(content, start)]
     for start, end in zip(starts, starts[1:] + [None]):
-        yield Level(name="prog", data=None, sublevels=chain(match_geo_opt(content, start, end)))
+        sublevels = []
+        geo_opt = match_geo_opt(content, start, end)
+        if geo_opt:
+            sublevels.append(geo_opt)
+
+        levels.append(CP2KRun(sublevels=sublevels))
+
+    return Tree(levels=levels)

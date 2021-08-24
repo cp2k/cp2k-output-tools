@@ -1,10 +1,10 @@
 from dataclasses import dataclass
-from typing import Iterator
+from typing import List, Optional
 
 import regex as re
 
 from .common import Level
-from .warnings import match_messages
+from .warnings import Message, match_messages
 
 GEO_OPT_RE = re.compile(
     r"""
@@ -43,15 +43,14 @@ GEO_OPT_END_RE = re.compile(
 @dataclass
 class GeometryOptimization(Level):
     converged: bool
-    pass
 
 
 @dataclass
 class GeometryOptimizationStep(Level):
-    pass
+    messages: List[Message]
 
 
-def match_geo_opt(content: str, start: int = 0, end: int = 0) -> Iterator[Level]:
+def match_geo_opt(content: str, start: int = 0, end: int = 0) -> Optional[GeometryOptimization]:
     start_match = GEO_OPT_RE.search(content, start, end)
 
     if not start_match:
@@ -76,12 +75,10 @@ def match_geo_opt(content: str, start: int = 0, end: int = 0) -> Iterator[Level]
         step_ends.append(end)
         converged = False
 
-    yield GeometryOptimization(
-        name="geoopt",
-        data=None,
+    return GeometryOptimization(
         converged=converged,
-        sublevels=(
-            GeometryOptimizationStep(name="geoopt_step", data=match_messages(content, start, end), sublevels=[])
+        sublevels=[
+            GeometryOptimizationStep(messages=list(match_messages(content, start, end)), sublevels=[])
             for start, end in zip(step_starts, step_ends)
-        ),
+        ],
     )
