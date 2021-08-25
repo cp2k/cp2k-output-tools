@@ -1,13 +1,22 @@
 import json
 import os
 import pathlib
-import sys
+from io import StringIO
 
 import click
+from rich.console import Console
+from rich.highlighter import RegexHighlighter, ReprHighlighter
+from rich.markup import escape
+from rich.syntax import Syntax
 
 from .blocks.common import merged_spans, span_char_count
 from .levelparser import parse_all, pretty_print
 from .parser import parse_iter_blocks
+
+
+class FortranNumberHighlighter(RegexHighlighter):
+    base_style = "repr."
+    highlights = ReprHighlighter.highlights + [r"(?P<number>[\+\-]?(\d*[\.]\d+|\d+[\.]?\d*)([DEe][\+\-]?\d+)?)"]
 
 
 @click.command()
@@ -33,6 +42,11 @@ from .parser import parse_iter_blocks
 @click.option("--experimental", is_flag=True, help="Use the experimental level parser", default=False)
 def cp2kparse(fhandle, oformat, color, safe_keys, statistics, paths, experimental):
     """Parse the CP2K output FILE and return a structured output"""
+    console = Console(
+        force_terminal=True if color == "always" else None,
+        highlighter=FortranNumberHighlighter(),
+    )
+    error_console = Console(force_terminal=True if color == "always" else None, highlighter=FortranNumberHighlighter(), stderr=True)
 
     tree = {}
     spans = []
@@ -67,7 +81,7 @@ def cp2kparse(fhandle, oformat, color, safe_keys, statistics, paths, experimenta
                     section = int(section)  # if we encounter a list, convert the respective path element
                 ref = ref[section]  # exploit Python using references into dicts/lists
 
-            click.echo(f"{path}: {_(ref)}")
+            console.print(f"{path}: {_(ref)}")
 
         return
 
@@ -75,23 +89,31 @@ def cp2kparse(fhandle, oformat, color, safe_keys, statistics, paths, experimenta
         from ruamel.yaml import YAML
 
         yaml = YAML()
-        yaml.dump(tree, sys.stdout)
+        yaml.indent(mapping=2, sequence=4, offset=2)
+        ycontent = StringIO()
+        yaml.dump(tree, ycontent)
+        syntax = Syntax(ycontent.getvalue(), "yaml")
+        console.print(syntax)
+
     elif oformat == "highlight":
         ptr = 0
         for start, end in spans:
-            click.secho(content[ptr:start], nl=False, dim=True, color=None if color == "auto" else True)
-            click.secho(content[start:end], nl=False, bold=True, color=None if color == "auto" else True)
+            console.print(
+                f"[dim]{escape(content[ptr:start])}[/][bold]{escape(content[start:end])}[/]",
+                end="",
+            )
             ptr = end
-        click.secho(content[ptr:], nl=False, dim=True, color=None if color == "auto" else True)
+        console.print(f"[dim]{escape(content[ptr:])}[/]")
 
     else:
-        click.echo(json.dumps(tree, indent=2, sort_keys=True))
+        syntax = Syntax(json.dumps(tree, indent=2, sort_keys=True), "json")
+        console.print(syntax)
 
     if statistics:
-        click.echo("Statistics:\n===========\n", err=True)
-        click.echo(f"Number of lines:      {len(content.splitlines()):>8}", err=True)
-        click.echo(f"Number of characters: {len(content):>8}", err=True)
-        click.echo(f"Percentage parsed:    {100*span_char_count(spans)/len(content):>8.2f}", err=True)
+        error_console.print("Statistics:\n===========\n")
+        error_console.print(f"Number of lines:      {len(content.splitlines()):>8}")
+        error_console.print(f"Number of characters: {len(content):>8}")
+        error_console.print(f"Percentage parsed:    {100*span_char_count(spans)/len(content):>8.2f}")
 
 
 @click.command()
