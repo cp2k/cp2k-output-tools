@@ -11,6 +11,7 @@ from .blocks.geo_opt import (
     GeometryOptimizationStep,
     match_geo_opt,
 )
+from .blocks.program_info import ProgramInfo, match_program_info
 
 PROG_START_MATCH = re.compile(
     r"""
@@ -31,7 +32,7 @@ PROG_START_MATCH = re.compile(
 
 @dataclass
 class CP2KRun(Level):
-    pass
+    program_info: Optional[ProgramInfo]
 
 
 @singledispatch
@@ -42,6 +43,7 @@ def pretty_print(level, indent=""):
 @pretty_print.register
 def _(level: CP2KRun, indent=""):
     print(f"{indent}CP2K:")
+    print(f"{indent}    ended_at: {level.program_info.ended_at}")
 
 
 @pretty_print.register
@@ -67,6 +69,8 @@ def parse_all(content: str, start: Optional[int] = 0, end: Optional[int] = 0) ->
         if geo_opt:
             sublevels.append(geo_opt)
 
-        levels.append(CP2KRun(sublevels=sublevels))
+        program_info = match_program_info(content, start, end, as_tree_obj=True)
+
+        levels.append(CP2KRun(sublevels=sublevels, program_info=program_info))
 
     return Tree(levels=levels)
