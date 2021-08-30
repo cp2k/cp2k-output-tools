@@ -1,5 +1,6 @@
 import datetime
 import pathlib
+import sys
 from dataclasses import dataclass
 from typing import Optional, Union
 
@@ -67,7 +68,9 @@ class ProgramInfo:
     stopped_in: Optional[pathlib.Path] = None
 
 
-def match_program_info(content: str, start=0, end=0, as_tree_obj: bool = False) -> Optional[Union[BlockMatch, ProgramInfo]]:
+def match_program_info(
+    content: str, start: int = 0, end: int = sys.maxsize, as_tree_obj: bool = False
+) -> Optional[Union[BlockMatch, ProgramInfo]]:
     spans = []
     match = PROGRAM_INFO_START_RE.search(content, start, end)
 

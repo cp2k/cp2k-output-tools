@@ -1,3 +1,4 @@
+import sys
 from dataclasses import dataclass
 from typing import Any, Dict, Iterator, Optional
 
@@ -87,7 +88,7 @@ def match_warnings(content: str) -> Optional[BlockMatch]:
     return BlockMatch(result, spans)
 
 
-def match_messages(content: str, start: int = 0, end: int = 0) -> Iterator[Message]:
+def match_messages(content: str, start: int = 0, end: int = sys.maxsize) -> Iterator[Message]:
     for match in WARNING_MESSAGE_RE.finditer(content, start, end):
         yield Message(
             type="warning",

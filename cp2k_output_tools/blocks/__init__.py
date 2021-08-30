@@ -1,3 +1,5 @@
+import pint
+
 from .bibliography import match_bibliography
 from .condition_number import match_overlap_matrix_condition_number
 from .energies import match_energies
@@ -19,3 +21,5 @@ builtin_matchers = [
     match_bibliography,
     match_kpoints,
 ]
+
+UREG = pint.UnitRegistry()

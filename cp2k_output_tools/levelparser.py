@@ -1,6 +1,7 @@
 """This is the level-based parser, allowing to correctly parse arbitrarily nested CP2K output"""
 
 import re
+import sys
 from dataclasses import dataclass
 from functools import singledispatch
 from typing import Optional
@@ -11,6 +12,7 @@ from .blocks.geo_opt import (
     GeometryOptimizationStep,
     match_geo_opt,
 )
+from .blocks.linres import Linres, match_linres
 from .blocks.program_info import ProgramInfo, match_program_info
 
 PROG_START_MATCH = re.compile(
@@ -43,7 +45,8 @@ def pretty_print(level, indent=""):
 @pretty_print.register
 def _(level: CP2KRun, indent=""):
     print(f"{indent}CP2K:")
-    print(f"{indent}    ended_at: {level.program_info.ended_at}")
+    print(f"{indent}    started at: {level.program_info.started_at}")
+    print(f"{indent}    ended at: {level.program_info.ended_at}")
 
 
 @pretty_print.register
@@ -59,15 +62,32 @@ def _(level: GeometryOptimizationStep, indent=""):
         print(f"{indent}    [{msg.type}]: {msg.message}")
 
 
-def parse_all(content: str, start: Optional[int] = 0, end: Optional[int] = 0) -> Tree:
+@pretty_print.register
+def _(level: Linres, indent=""):
+    print(f"{indent}Linres:")
+    print(f"{indent}    properties: {', '.join(level.properties)}")
+
+    if level.polarizability_tensor:
+        print(f"{indent}    Polarizability Tensor:", level.polarizability_tensor)
+
+    for msg in level.messages:
+        print(f"{indent}    [{msg.type}]: {msg.message}")
+
+
+def parse_all(content: str, start: int = 0, end: int = sys.maxsize) -> Tree:
     levels = []
 
     starts = [match.span()[0] for match in PROG_START_MATCH.finditer(content, start)]
     for start, end in zip(starts, starts[1:] + [None]):
         sublevels = []
+
         geo_opt = match_geo_opt(content, start, end)
         if geo_opt:
             sublevels.append(geo_opt)
+
+        linres = match_linres(content, start, end)
+        if linres:
+            sublevels.append(linres)
 
         program_info = match_program_info(content, start, end, as_tree_obj=True)
 

@@ -1,3 +1,4 @@
+import sys
 from dataclasses import dataclass
 from typing import List, Optional
 
@@ -50,7 +51,7 @@ class GeometryOptimizationStep(Level):
     messages: List[Message]
 
 
-def match_geo_opt(content: str, start: int = 0, end: int = 0) -> Optional[GeometryOptimization]:
+def match_geo_opt(content: str, start: int = 0, end: int = sys.maxsize) -> Optional[GeometryOptimization]:
     start_match = GEO_OPT_RE.search(content, start, end)
 
     if not start_match:
