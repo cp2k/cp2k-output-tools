@@ -5,6 +5,7 @@ from typing import List, Optional
 import regex as re
 
 from .common import Level
+from .scf import match_scf
 from .warnings import Message, match_messages
 
 GEO_OPT_RE = re.compile(
@@ -76,10 +77,14 @@ def match_geo_opt(content: str, start: int = 0, end: int = sys.maxsize) -> Optio
         step_ends.append(end)
         converged = False
 
-    return GeometryOptimization(
-        converged=converged,
-        sublevels=[
-            GeometryOptimizationStep(messages=list(match_messages(content, start, end)), sublevels=[])
-            for start, end in zip(step_starts, step_ends)
-        ],
-    )
+    steps = []
+    for start, end in zip(step_starts, step_ends):
+        sublevels = []
+
+        scf = match_scf(content, start, end)
+        if scf:
+            sublevels.append(scf)
+
+        steps.append(GeometryOptimizationStep(messages=list(match_messages(content, start, end)), sublevels=sublevels))
+
+    return GeometryOptimization(converged=converged, sublevels=steps)

@@ -14,6 +14,7 @@ from .blocks.geo_opt import (
 )
 from .blocks.linres import Linres, match_linres
 from .blocks.program_info import ProgramInfo, match_program_info
+from .blocks.scf import SCF, match_scf
 
 PROG_START_MATCH = re.compile(
     r"""
@@ -39,7 +40,7 @@ class CP2KRun(Level):
 
 @singledispatch
 def pretty_print(level, indent=""):
-    pass
+    print(f"{indent}{type(level).__name__}:")
 
 
 @pretty_print.register
@@ -74,6 +75,16 @@ def _(level: Linres, indent=""):
         print(f"{indent}    [{msg.type}]: {msg.message}")
 
 
+@pretty_print.register
+def _(level: SCF, indent=""):
+    print(f"{indent}SCF:")
+    if level.force_eval_energy:
+        print(f"{indent}    Total FORCE_EVAL energy: {level.force_eval_energy}")
+
+    for msg in level.messages:
+        print(f"{indent}    [{msg.type}]: {msg.message}")
+
+
 def parse_all(content: str, start: int = 0, end: int = sys.maxsize) -> Tree:
     levels = []
 
@@ -84,6 +95,10 @@ def parse_all(content: str, start: int = 0, end: int = sys.maxsize) -> Tree:
         geo_opt = match_geo_opt(content, start, end)
         if geo_opt:
             sublevels.append(geo_opt)
+
+        scf = match_scf(content, start, end)
+        if scf:
+            sublevels.append(scf)
 
         linres = match_linres(content, start, end)
         if linres:
