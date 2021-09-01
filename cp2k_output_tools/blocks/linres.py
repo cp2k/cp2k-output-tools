@@ -1,7 +1,7 @@
 import sys
 from dataclasses import dataclass
 from decimal import Decimal
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 import regex as re
 
@@ -63,18 +63,18 @@ class Linres(Level):
     polarizability_tensor: Optional[PolarizabilityTensor]
 
 
-def match_linres(content: str, start: int = 0, end: int = sys.maxsize) -> Optional[Linres]:
+def match_linres(content: str, start: int = 0, end: int = sys.maxsize) -> Optional[Tuple[Linres, Tuple[int, int]]]:
     match = LINRES_RE.search(content, start, end)
 
     if not match:
-        return None
+        return None, (start, end)
+
+    start = match.span()[1]
 
     props = match.captures("props")
     kv = dict(zip([k.lower().replace(" ", "_") for k in match.captures("key")], match.captures("value")))
     kv["eps"] = Decimal(kv["eps"])
     kv["max_iter"] = int(kv["max_iter"])
-
-    start = match.span()[1]
 
     match = LINRES_END_RE.search(content, start, end)
     if match:
@@ -88,4 +88,4 @@ def match_linres(content: str, start: int = 0, end: int = sys.maxsize) -> Option
         ptensor = PolarizabilityTensor(**{k: Decimal(v) * UREG.bohr ** 3 for k, v in zip(*match.captures("coord", "val"))})
 
     # TODO: linres contains minimalization loops which should go into sublevels
-    return Linres(properties=props, messages=msgs, polarizability_tensor=ptensor, sublevels=[], **kv)
+    return Linres(properties=props, messages=msgs, polarizability_tensor=ptensor, sublevels=[], **kv), (start, end)

@@ -15,6 +15,7 @@ from .blocks.geo_opt import (
 from .blocks.linres import Linres, match_linres
 from .blocks.program_info import ProgramInfo, match_program_info
 from .blocks.scf import SCF, match_scf
+from .blocks.vibrational import VibrationalAnalysis, match_vibrational_analysis
 
 PROG_START_MATCH = re.compile(
     r"""
@@ -68,20 +69,39 @@ def _(level: Linres, indent=""):
     print(f"{indent}Linres:")
     print(f"{indent}    properties: {', '.join(level.properties)}")
 
-    if level.polarizability_tensor:
-        print(f"{indent}    Polarizability Tensor:", level.polarizability_tensor)
-
     for msg in level.messages:
         print(f"{indent}    [{msg.type}]: {msg.message}")
 
 
 @pretty_print.register
-def _(level: SCF, indent=""):
+def _(scf: SCF, indent=""):
     print(f"{indent}SCF:")
-    if level.force_eval_energy:
-        print(f"{indent}    Total FORCE_EVAL energy: {level.force_eval_energy}")
+    if scf.force_eval_energy:
+        print(f"{indent}    Total FORCE_EVAL energy: {scf.force_eval_energy}")
 
-    for msg in level.messages:
+    if scf.homo_lumo_gap:
+        print(f"{indent}    HOMO-LUMO Gap: {scf.homo_lumo_gap}")
+
+    if scf.fermi_energy:
+        print(f"{indent}    Fermi energy: {scf.fermi_energy}")
+
+    if scf.moments:
+        print(f"{indent}    Moments:")
+        print(f"{indent}        Ref.point:", scf.moments.reference_point)
+        print(f"{indent}        Dipole available:", bool(scf.moments.dipole))
+        print(f"{indent}        Quadrupole available:", bool(scf.moments.quadrupole))
+
+    for msg in scf.messages:
+        print(f"{indent}    [{msg.type}]: {msg.message}")
+
+
+@pretty_print.register
+def _(vib_analysis: VibrationalAnalysis, indent=""):
+    print(f"{indent}Vibrational Analysis:")
+    if vib_analysis.data:
+        print(f"{indent}    Modes found: {len(vib_analysis.data.frequencies)}")
+
+    for msg in vib_analysis.messages:
         print(f"{indent}    [{msg.type}]: {msg.message}")
 
 
@@ -92,19 +112,27 @@ def parse_all(content: str, start: int = 0, end: int = sys.maxsize) -> Tree:
     for start, end in zip(starts, starts[1:] + [None]):
         sublevels = []
 
-        geo_opt = match_geo_opt(content, start, end)
+        program_info = match_program_info(content, start, end, as_tree_obj=True)
+
+        geo_opt, span = match_geo_opt(content, start, end)
         if geo_opt:
             sublevels.append(geo_opt)
+            start = span[1]
 
-        scf = match_scf(content, start, end)
+        scf, span = match_scf(content, start, end)
         if scf:
             sublevels.append(scf)
+            start = span[1]
 
-        linres = match_linres(content, start, end)
+        linres, span = match_linres(content, start, end)
         if linres:
             sublevels.append(linres)
+            start = span[1]
 
-        program_info = match_program_info(content, start, end, as_tree_obj=True)
+        vib_analysis, span = match_vibrational_analysis(content, start, end)
+        if vib_analysis:
+            sublevels.append(vib_analysis)
+            start = span[1]
 
         levels.append(CP2KRun(sublevels=sublevels, program_info=program_info))
 

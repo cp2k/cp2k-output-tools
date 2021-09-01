@@ -67,8 +67,11 @@ class Tree:
             yield (len(lvl), current)
             lvl[-1] -= 1
 
-            stack += current.sublevels[::-1]
-            lvl.append(len(current.sublevels))
+            try:
+                stack += current.sublevels[::-1]
+                lvl.append(len(current.sublevels))
+            except AttributeError:
+                pass
 
             while lvl and lvl[-1] == 0:  # done with the current level?
                 lvl.pop()

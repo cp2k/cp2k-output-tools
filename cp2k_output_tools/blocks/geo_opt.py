@@ -1,6 +1,6 @@
 import sys
 from dataclasses import dataclass
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 import regex as re
 
@@ -52,11 +52,11 @@ class GeometryOptimizationStep(Level):
     messages: List[Message]
 
 
-def match_geo_opt(content: str, start: int = 0, end: int = sys.maxsize) -> Optional[GeometryOptimization]:
+def match_geo_opt(content: str, start: int = 0, end: int = sys.maxsize) -> Optional[Tuple[GeometryOptimization, Tuple[int, int]]]:
     start_match = GEO_OPT_RE.search(content, start, end)
 
     if not start_match:
-        return
+        return None, (start, end)
 
     step_starts = [start_match.span()[1] + 1]
     step_ends = []
@@ -81,10 +81,12 @@ def match_geo_opt(content: str, start: int = 0, end: int = sys.maxsize) -> Optio
     for start, end in zip(step_starts, step_ends):
         sublevels = []
 
-        scf = match_scf(content, start, end)
+        scf, _ = match_scf(content, start, end)
         if scf:
             sublevels.append(scf)
+        else:
+            print("NO SCF FOUND in this", content[start:end])
 
         steps.append(GeometryOptimizationStep(messages=list(match_messages(content, start, end)), sublevels=sublevels))
 
-    return GeometryOptimization(converged=converged, sublevels=steps)
+    return GeometryOptimization(converged=converged, sublevels=steps), (start_match.span()[0], step_ends[-1])
