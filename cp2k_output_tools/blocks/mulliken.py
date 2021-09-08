@@ -10,35 +10,35 @@ MULLIKEN_POPULATION_ANALYSIS_RE = re.compile(
 ^[ \t]* Mulliken\ Population\ Analysis [ \t]* \n
  [ \t]* \n
  [ \t]* \#  [\w \t\,\(\)]+\n  # match the header
-(
+(?:
   ^
   [ \t]*
   (?P<atom>\d+) [ \t]+
   (?P<element>\w+) [ \t]+
   (?P<kind>\d+) [ \t]+
-  (
-    ( # spin unrestricted case:
-      (?P<population_alpha>({FLOAT})) [ \t]+ (?P<population_beta>({FLOAT})) [ \t]+
-      (?P<charge>({FLOAT})) [ \t]+ (?P<spin>({FLOAT}))
+  (?:
+    (?: # spin unrestricted case:
+      (?P<population_alpha>{FLOAT}) [ \t]+ (?P<population_beta>{FLOAT}) [ \t]+
+      (?P<charge>{FLOAT}) [ \t]+ (?P<spin>{FLOAT})
     )
     |
-    (
-      (?P<population>({FLOAT})) [ \t]+
-      (?P<charge>({FLOAT}))
+    (?:
+      (?P<population>{FLOAT}) [ \t]+
+      (?P<charge>{FLOAT})
     )
   ) [ \t]*
   \n
 )+
 ^ [ \t]* \#\ Total\ charge (\ and\ spin)? [ \t]+
-(
-  ( # spin unrestricted case:
-    (?P<total_population_alpha>({FLOAT})) [ \t]+ (?P<total_population_beta>({FLOAT})) [ \t]+
-    (?P<total_charge>({FLOAT})) [ \t]+ (?P<total_spin>({FLOAT}))
+(?:
+  (?: # spin unrestricted case:
+    (?P<total_population_alpha>{FLOAT}) [ \t]+ (?P<total_population_beta>{FLOAT}) [ \t]+
+    (?P<total_charge>{FLOAT}) [ \t]+ (?P<total_spin>{FLOAT})
   )
   |
-  (
-    (?P<total_population>({FLOAT})) [ \t]+
-    (?P<total_charge>({FLOAT}))
+  (?:
+    (?P<total_population>{FLOAT}) [ \t]+
+    (?P<total_charge>{FLOAT})
   )
 ) [ \t]*
 \n

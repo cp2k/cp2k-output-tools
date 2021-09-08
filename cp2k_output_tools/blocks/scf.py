@@ -8,19 +8,20 @@ import regex as re
 from . import UREG
 from .common import FLOAT, Level
 from .energies import FORCE_EVAL_ENERGY_RE
+from .mulliken import MULLIKEN_POPULATION_ANALYSIS_RE
 from .warnings import Message, match_messages
 
 SCF_START_RE = re.compile(
     r"""
 ^(?:
-  (?:\ Spin\s+(?P<spin>\d+)\n)?
+  (?:\ Spin\ (?P<spin>\d+)\n\n)?
   \ Number\ of\ electrons:\s+ (?P<nelec>\d+)\n
   \ Number\ of\ occupied\ orbitals:\s+  (?P<num_occ_orb>\d+)\n
   \ Number\ of\ molecular\ orbitals:\s+ (?P<num_mol_orb>\d+)\n
+  \n
 ){1,2}
-\n
 \ Number\ of\ orbital\ functions:\s+ (?P<num_orb_func>\d+)\n
-    """,
+""",
     re.VERBOSE | re.MULTILINE,
 )
 
@@ -87,6 +88,20 @@ class Moments:
 
 
 @dataclass
+class MullikenPopulationAnalysis:
+    elements: List[str]
+    kinds: List[int]
+    atomic_population_alpha: List[Decimal]
+    atomic_population_beta: Optional[List[Decimal]]
+    net_charge: List[Decimal]
+    spin_moment: Optional[List[Decimal]]
+    total_atomic_population_alpha: Decimal
+    total_atomic_population_beta: Optional[Decimal]
+    total_net_charge: Decimal
+    total_spin_moment: Optional[Decimal]
+
+
+@dataclass
 class SCF(Level):
     nspin: int
     nelec: Union[int, Tuple[int, int]]
@@ -98,6 +113,7 @@ class SCF(Level):
     fermi_energy: Optional[Union[Decimal, Tuple[Decimal, Decimal]]] = None
     homo_lumo_gap: Optional[Decimal] = None
     moments: Optional[Moments] = None
+    mulliken_population_analysis: Optional[MullikenPopulationAnalysis] = None
 
 
 def match_scf(content: str, start: int = 0, end: int = sys.maxsize) -> Optional[Tuple[SCF, Tuple[int, int]]]:
@@ -162,5 +178,20 @@ def match_scf(content: str, start: int = 0, end: int = sys.maxsize) -> Optional[
                     for k, v in zip(*match.captures("quadrupole_coord", "quadrupole_value"))
                 }
             )
+
+    match = MULLIKEN_POPULATION_ANALYSIS_RE.search(content, start, end)
+    if match:
+        scf.mulliken_population_analysis = MullikenPopulationAnalysis(
+            elements=match.captures("element"),
+            kinds=[int(k) for k in match.captures("kind")],
+            atomic_population_alpha=[Decimal(v) for v in match.captures("population_alpha" if nspin == 2 else "population")],
+            atomic_population_beta=[Decimal(v) for v in match.captures("population_beta")] if nspin == 2 else None,
+            net_charge=[Decimal(v) for v in match.captures("population_beta")],
+            spin_moment=[Decimal(v) for v in match.captures("spin")] if nspin == 2 else None,
+            total_atomic_population_alpha=Decimal(match["total_population_alpha"] if nspin == 2 else match["total_population"]),
+            total_atomic_population_beta=Decimal(match["total_population_beta"]) if nspin == 2 else None,
+            total_net_charge=Decimal(match["total_charge"]),
+            total_spin_moment=Decimal(match["total_spin"]) if nspin == 2 else None,
+        )
 
     return scf, (start, end)
