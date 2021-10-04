@@ -30,7 +30,7 @@ yaml = ["ruamel.yaml"]
 [tool.poetry.dev-dependencies]
 pytest = "^6.0"
 codecov = "^2.0.15"
-pytest-cov = "^2.7.1"
+pytest-cov = "^3.0.0"
 pytest-console-scripts = "^1.2.0"
 
 [tool.poetry.scripts]
