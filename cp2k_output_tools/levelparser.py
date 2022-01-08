@@ -14,7 +14,7 @@ from .blocks.geo_opt import (
 )
 from .blocks.linres import Linres, match_linres
 from .blocks.program_info import ProgramInfo, match_program_info
-from .blocks.scf import SCF, match_scf
+from .blocks.scf import SCF, OuterSCF, InnerSCF, match_scf
 from .blocks.vibrational import VibrationalAnalysis, match_vibrational_analysis
 
 PROG_START_MATCH = re.compile(
@@ -76,6 +76,7 @@ def _(level: Linres, indent=""):
 @pretty_print.register
 def _(scf: SCF, indent=""):
     print(f"{indent}SCF:")
+    print(f"{indent}    converged: {scf.converged}")
     if scf.force_eval_energy:
         print(f"{indent}    Total FORCE_EVAL energy: {scf.force_eval_energy}")
 
@@ -91,8 +92,29 @@ def _(scf: SCF, indent=""):
         print(f"{indent}        Dipole available:", bool(scf.moments.dipole))
         print(f"{indent}        Quadrupole available:", bool(scf.moments.quadrupole))
 
+    if scf.mulliken_population_analysis:
+        print(f"{indent}    Mulliken Population Analysis:")
+        print(f"{indent}        (present)")
+
     for msg in scf.messages:
         print(f"{indent}    [{msg.type}]: {msg.message}")
+
+
+@pretty_print.register
+def _(outer_scf: OuterSCF, indent=""):
+    print(f"{indent}Outer SCF:")
+    print(f"{indent}    converged: {outer_scf.converged}")
+    print(f"{indent}    number of iterations: {outer_scf.niter}")
+    print(f"{indent}    total number of steps: {outer_scf.nsteps}")
+    print(f"{indent}    RMS gradient: {outer_scf.rms_gradient}")
+    print(f"{indent}    energy: {outer_scf.energy}")
+
+
+@pretty_print.register
+def _(innner_scf: InnerSCF, indent=""):
+    print(f"{indent}Inner SCF:")
+    print(f"{indent}    converged: {innner_scf.converged}")
+    print(f"{indent}    number of steps: {innner_scf.nsteps}")
 
 
 @pretty_print.register
