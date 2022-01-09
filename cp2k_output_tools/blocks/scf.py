@@ -60,17 +60,21 @@ MOMENTS_RE = re.compile(
 
 
 OUTER_SCF_RE = re.compile(
-        r"""
+    r"""
 ^
 \s+ outer\ SCF\ iter\ = \s*\d+\ RMS\ gradient\ = \s* (?P<rms_gradient>\S+)\ energy\ = \s* (?P<energy>\S+) \n
-\s+ outer\ SCF\ loop\ (?P<convtxt>converged\ in|FAILED\ to\ converge\ after) \s+ (?P<niter>\d+)\ iterations\ or \s+ (?P<nsteps>\d+)\ steps\n
+\s+ outer\ SCF\ loop\ (?P<convtxt>converged\ in|FAILED\ to\ converge\ after)
+    \s+ (?P<niter>\d+)\ iterations\ or \s+ (?P<nsteps>\d+)\ steps\n
 """,
     re.VERBOSE | re.MULTILINE,
-    )
+)
 
 
 INNER_SCF_START_RE = re.compile(r"^\s+ SCF\ WAVEFUNCTION\ OPTIMIZATION", re.VERBOSE | re.MULTILINE)
-INNER_SCF_END_RE = re.compile(r"^\s+ (?P<convtxt>\*\*\*\ SCF\ run\ converged\ in|Leaving\ inner\ SCF\ loop\ after\ reaching) \s+ (?P<nsteps>\d+)\ steps", re.VERBOSE | re.MULTILINE)
+INNER_SCF_END_RE = re.compile(
+    r"^\s+ (?P<convtxt>\*\*\*\ SCF\ run\ converged\ in|Leaving\ inner\ SCF\ loop\ after\ reaching) \s+ (?P<nsteps>\d+)\ steps",
+    re.VERBOSE | re.MULTILINE,
+)
 
 
 @dataclass
@@ -133,6 +137,7 @@ class InnerSCF(Level):
 @dataclass
 class SCF(Level):
     """The SCF procedure (which might again consist of InnerSCF or Outer+InnerSCF"""
+
     nspin: int
     nelec: Union[int, Tuple[int, int]]
     num_occ_orb: Union[int, Tuple[int, int]]
@@ -173,14 +178,16 @@ def match_scf(content: str, start: int = 0, end: int = sys.maxsize) -> Optional[
 
     match = OUTER_SCF_RE.search(content, start, end)
     if match:
-        sublevels.append(OuterSCF(
-            converged=match["convtxt"] == "converged in",
-            niter=int(match["niter"]),
-            nsteps=int(match["nsteps"]),
-            rms_gradient=Decimal(match["rms_gradient"]),
-            energy=Decimal(match["energy"]) * UREG.hartree,
-            sublevels=[],
-            ))
+        sublevels.append(
+            OuterSCF(
+                converged=match["convtxt"] == "converged in",
+                niter=int(match["niter"]),
+                nsteps=int(match["nsteps"]),
+                rms_gradient=Decimal(match["rms_gradient"]),
+                energy=Decimal(match["energy"]) * UREG.hartree,
+                sublevels=[],
+            )
+        )
         start = match.span()[1]  # if available, definitely before everything else below
 
     # try to match a single (inner) SCF
@@ -190,10 +197,7 @@ def match_scf(content: str, start: int = 0, end: int = sys.maxsize) -> Optional[
         ematch = INNER_SCF_END_RE.search(content, start, end)
         if ematch:
             start = match.span()[1]
-            sublevels.append(InnerSCF(
-                converged="SCF run converged" in ematch["convtxt"],
-                nsteps=ematch["nsteps"],
-                sublevels=[]))
+            sublevels.append(InnerSCF(converged="SCF run converged" in ematch["convtxt"], nsteps=ematch["nsteps"], sublevels=[]))
 
     force_eval_energy: Optional[Decimal] = None
     match = FORCE_EVAL_ENERGY_RE.search(content, start, end)
@@ -202,9 +206,12 @@ def match_scf(content: str, start: int = 0, end: int = sys.maxsize) -> Optional[
         end = match.span()[0]  # denotes the end of the SCF section
 
     scf = SCF(
-        nspin=nspin, force_eval_energy=force_eval_energy, sublevels=sublevels, messages=list(match_messages(content, start, end)),
+        nspin=nspin,
+        force_eval_energy=force_eval_energy,
+        sublevels=sublevels,
+        messages=list(match_messages(content, start, end)),
         converged=sublevels[-1].converged if sublevels else False,
-        **kv
+        **kv,
     )
 
     match = HOMO_LUMO_GAP_RE.search(content, start, end)

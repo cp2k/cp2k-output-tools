@@ -14,7 +14,7 @@ from .blocks.geo_opt import (
 )
 from .blocks.linres import Linres, match_linres
 from .blocks.program_info import ProgramInfo, match_program_info
-from .blocks.scf import SCF, OuterSCF, InnerSCF, match_scf
+from .blocks.scf import SCF, InnerSCF, OuterSCF, match_scf
 from .blocks.vibrational import VibrationalAnalysis, match_vibrational_analysis
 
 PROG_START_MATCH = re.compile(
