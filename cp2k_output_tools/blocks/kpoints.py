@@ -111,7 +111,9 @@ def match_kpoints(content: str) -> Optional[BlockMatch]:
     except TypeError:
         pass  # optional
 
-    for match in KPOINTS_SET_RE.finditer(match["content"]):
+    block_content = match["content"]
+
+    for match in KPOINTS_SET_RE.finditer(block_content):
         specialpoints = [
             {
                 "nr": int(nr),

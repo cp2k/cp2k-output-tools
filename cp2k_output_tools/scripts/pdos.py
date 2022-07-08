@@ -112,7 +112,7 @@ def cp2k_pdos():
         ncol = data.shape[1] - DENSITY_COLUMN
 
         for idx in range(nmesh):
-            func = np.exp(-((xmesh[idx] - data[:, EIGENVALUE_COLUMN]) ** 2) / (2.0 * args.sigma ** 2)) * fact
+            func = np.exp(-((xmesh[idx] - data[:, EIGENVALUE_COLUMN]) ** 2) / (2.0 * args.sigma**2)) * fact
             ymesh[idx, coloffset : (coloffset + ncol)] = func.dot(data[:, DENSITY_COLUMN:])
 
         coloffset += ncol

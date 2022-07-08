@@ -85,7 +85,7 @@ def match_linres(content: str, start: int = 0, end: int = sys.maxsize) -> Option
     ptensor: Optional[PolarizabilityTensor] = None
     match = POLARIZABILITY_TENSOR_RE.search(content, start, end)
     if match:
-        ptensor = PolarizabilityTensor(**{k: Decimal(v) * UREG.bohr ** 3 for k, v in zip(*match.captures("coord", "val"))})
+        ptensor = PolarizabilityTensor(**{k: Decimal(v) * UREG.bohr**3 for k, v in zip(*match.captures("coord", "val"))})
 
     # TODO: linres contains minimalization loops which should go into sublevels
     return Linres(properties=props, messages=msgs, polarizability_tensor=ptensor, sublevels=[], **kv), (start, end)

@@ -84,9 +84,9 @@ def _match_data(content: str, start: int = 0, end: int = sys.maxsize) -> Tuple[O
 
     return (
         Data(
-            frequencies=[Decimal(v) * UREG.cm ** -1 for v in match.captures("freq")],
+            frequencies=[Decimal(v) * UREG.cm**-1 for v in match.captures("freq")],
             reduced_masses=[Decimal(v) * UREG.amu for v in match.captures("mass")],
-            force_constants=[Decimal(v) * UREG.hartree / UREG.bohr ** 2 for v in match.captures("frcc")],  # TODO: check
+            force_constants=[Decimal(v) * UREG.hartree / UREG.bohr**2 for v in match.captures("frcc")],  # TODO: check
             intensities=intensities,
             atomic_symbols=match.captures("sym")[:natoms],
             normal_coords=normal_coords * UREG.angstrom,
