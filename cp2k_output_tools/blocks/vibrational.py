@@ -28,7 +28,7 @@ FREQUENCY_RE = re.compile(
 (?:
   \ VIB\|(?:\ +(?P<colnr>\d+)){1,3} \n
   \ VIB\|Frequency\ \(cm\^-1\) (?:\ +(?P<freq>\S+)){1,3} \n
-  (\ VIB\|Intensities (?:\ +(?P<intens>\S+)){1,3} \n)?
+  (\ VIB\|(?:Intensities|IR\ int\ \(KM/Mole\)) (?:\ +(?P<intens>\S+)){1,3} \n)?
   \ VIB\|Red\.Masses\ \(a\.u\.\) (?:\ +(?P<mass>\S+)){1,3} \n
   \ VIB\|Frc\ consts\ \(a\.u\.\) (?:\ +(?P<frcc>\S+)){1,3} \n
   \ +ATOM\ +EL (?:\ +[XYZ])+ \ * \n
@@ -80,7 +80,7 @@ def _match_data(content: str, start: int = 0, end: int = sys.maxsize) -> Tuple[O
 
     intensities: Optional[List[Decimal]] = None
     if match["intens"]:
-        intensities = [Decimal(v) for v in match.captures("intens")]  # TODO: units
+        intensities = [Decimal(v) * UREG.kilometers / UREG.mole for v in match.captures("intens")]
 
     return (
         Data(
