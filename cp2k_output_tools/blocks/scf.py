@@ -197,13 +197,15 @@ def match_scf(content: str, start: int = 0, end: int = sys.maxsize) -> Optional[
         ematch = INNER_SCF_END_RE.search(content, start, end)
         if ematch:
             start = match.span()[1]
-            sublevels.append(InnerSCF(converged="SCF run converged" in ematch["convtxt"], nsteps=ematch["nsteps"], sublevels=[]))
+            sublevels.append(
+                InnerSCF(converged="SCF run converged" in ematch["convtxt"], nsteps=int(ematch["nsteps"]), sublevels=[])
+            )
 
     force_eval_energy: Optional[Decimal] = None
     match = FORCE_EVAL_ENERGY_RE.search(content, start, end)
     if match:
         force_eval_energy = Decimal(match["value"]) * UREG.hartree
-        end = match.span()[0]  # denotes the end of the SCF section
+        end = match.span()[1]  # denotes the end of the SCF section
 
     scf = SCF(
         nspin=nspin,
