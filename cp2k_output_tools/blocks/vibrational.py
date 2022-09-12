@@ -56,6 +56,10 @@ class VibrationalAnalysis:
     messages: List[Message]
 
 
+def _conv_vals(lst: List[str], unit):
+    return [Decimal(v if "*" not in v else "NaN") * unit for v in lst]
+
+
 def _match_data(content: str, start: int = 0, end: int = sys.maxsize) -> Tuple[Optional[VibrationalAnalysis], Tuple[int, int]]:
 
     match = FREQUENCY_RE.search(content, start, end)
@@ -80,13 +84,13 @@ def _match_data(content: str, start: int = 0, end: int = sys.maxsize) -> Tuple[O
 
     intensities: Optional[List[Decimal]] = None
     if match["intens"]:
-        intensities = [Decimal(v) * UREG.kilometers / UREG.mole for v in match.captures("intens")]
+        intensities = _conv_vals(match.captures("intens"), UREG.kilometers / UREG.mole)
 
     return (
         Data(
-            frequencies=[Decimal(v) * UREG.cm**-1 for v in match.captures("freq")],
-            reduced_masses=[Decimal(v) * UREG.amu for v in match.captures("mass")],
-            force_constants=[Decimal(v) * UREG.hartree / UREG.bohr**2 for v in match.captures("frcc")],  # TODO: check
+            frequencies=_conv_vals(match.captures("freq"), UREG.cm**-1),
+            reduced_masses=_conv_vals(match.captures("mass"), UREG.amu),
+            force_constants=_conv_vals(match.captures("frcc"), UREG.hartree / UREG.bohr**2),  # TODO: check
             intensities=intensities,
             atomic_symbols=match.captures("sym")[:natoms],
             normal_coords=normal_coords * UREG.angstrom,
