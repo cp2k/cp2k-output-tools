@@ -4,8 +4,9 @@ import re
 import sys
 from dataclasses import dataclass
 from functools import singledispatch
-from typing import Optional
+from typing import List, Optional
 
+from .blocks.cell import CellInformation, match_cell
 from .blocks.common import Level, Tree
 from .blocks.geo_opt import (
     GeometryOptimization,
@@ -37,6 +38,7 @@ PROG_START_MATCH = re.compile(
 @dataclass
 class CP2KRun(Level):
     program_info: Optional[ProgramInfo]
+    cell_infos: List[CellInformation]
 
 
 @singledispatch
@@ -49,6 +51,8 @@ def _(level: CP2KRun, indent=""):
     print(f"{indent}CP2K:")
     print(f"{indent}    started at: {level.program_info.started_at}")
     print(f"{indent}    ended at: {level.program_info.ended_at}")
+    for cell_info in level.cell_infos:
+        print(f"{indent}    {cell_info.cell_info_type} cell volume: {cell_info.volume}")
 
 
 @pretty_print.register
@@ -136,6 +140,15 @@ def parse_all(content: str, start: int = 0, end: int = sys.maxsize) -> Tree:
 
         program_info = match_program_info(content, start, end, as_tree_obj=True)
 
+        cell_infos = []
+        while True:
+            cell_info, span = match_cell(content, start, end)
+            if cell_info is None:
+                break
+
+            cell_infos.append(cell_info)
+            start = span[1]  # move the start ahead to the end of the cell section
+
         geo_opt, span = match_geo_opt(content, start, end)
         if geo_opt:
             sublevels.append(geo_opt)
@@ -156,6 +169,6 @@ def parse_all(content: str, start: int = 0, end: int = sys.maxsize) -> Tree:
             sublevels.append(vib_analysis)
             start = span[1]
 
-        levels.append(CP2KRun(sublevels=sublevels, program_info=program_info))
+        levels.append(CP2KRun(sublevels=sublevels, program_info=program_info, cell_infos=cell_infos))
 
     return Tree(levels=levels)
