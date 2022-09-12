@@ -16,6 +16,7 @@ from .blocks.geo_opt import (
 from .blocks.linres import Linres, match_linres
 from .blocks.program_info import ProgramInfo, match_program_info
 from .blocks.scf import SCF, InnerSCF, OuterSCF, match_scf
+from .blocks.sirius import Sirius, SiriusSCF, match_sirius
 from .blocks.vibrational import VibrationalAnalysis, match_vibrational_analysis
 
 PROG_START_MATCH = re.compile(
@@ -131,6 +132,25 @@ def _(vib_analysis: VibrationalAnalysis, indent=""):
         print(f"{indent}    [{msg.type}]: {msg.message}")
 
 
+@pretty_print.register
+def _(scf: Sirius, indent=""):
+    print(f"{indent}Sirius:")
+    print(f"{indent}    SIRIUS version: {scf.version}")
+    if scf.force_eval_energy:
+        print(f"{indent}    Total FORCE_EVAL energy: {scf.force_eval_energy}")
+
+    for msg in scf.messages:
+        print(f"{indent}    [{msg.type}]: {msg.message}")
+
+
+@pretty_print.register
+def _(scf: SiriusSCF, indent=""):
+    print(f"{indent}SCF:")
+    print(f"{indent}    converged: {scf.converged}")
+    if scf.nsteps:
+        print(f"{indent}    number of iterations: {scf.nsteps}")
+
+
 def parse_all(content: str, start: int = 0, end: int = sys.maxsize) -> Tree:
     levels = []
 
@@ -157,6 +177,11 @@ def parse_all(content: str, start: int = 0, end: int = sys.maxsize) -> Tree:
         scf, span = match_scf(content, start, end)
         if scf:
             sublevels.append(scf)
+            start = span[1]
+
+        sirius, span = match_sirius(content, start, end)
+        if sirius:
+            sublevels.append(sirius)
             start = span[1]
 
         linres, span = match_linres(content, start, end)
