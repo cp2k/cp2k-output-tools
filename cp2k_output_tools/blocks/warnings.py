@@ -113,7 +113,7 @@ def match_messages(content: str, start: int = 0, end: int = sys.maxsize) -> Iter
         yield Message(
             type=match["type"].lower(),
             message=match["message"].strip(),
-            details=match.captures("details").strip() if match.captures("details") else None,
+            details=" ".join(d.strip() for d in match.captures("details")) if match.captures("details") else None,
             component="SIRIUS",
             filename=match["filename"],
             line=int(match["line"]),
