@@ -41,10 +41,14 @@ cp2k_pdos = 'cp2k_output_tools.scripts.pdos:cp2k_pdos'
 
 [tool.black]
 line-length = 132
-target_version = ['py38']
+target_version = ['py39']
 
-[tool.isort]
-profile = "black"
+[tool.ruff]
+# Enable flake8-bugbear (`B`) and isort (`I`) rules.
+select = ["E", "F", "B", "I"]
+line-length = 136
+# ignore missing strict= argument for zip for py<3.10 compat
+ignore = ["B905"]
 
 [build-system]
 requires = ["poetry>=1"]

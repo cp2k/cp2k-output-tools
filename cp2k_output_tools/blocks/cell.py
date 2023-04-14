@@ -43,7 +43,6 @@ class CellInformation:
 
 
 def match_cell(content: str, start: int = 0, end: int = sys.maxsize) -> Tuple[Optional[CellInformation], Tuple[int, int]]:
-
     match = CELL_RE.search(content, start, end)
 
     if not match:

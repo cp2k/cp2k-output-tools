@@ -96,7 +96,9 @@ class BlockIterator(Iterator):
                 raise
             else:
                 # otherwise we got too less entries
-                raise ValueError(f"Number of atom entries {self._catom} is smaller than the number of atoms {self._natoms}")
+                raise ValueError(
+                    f"Number of atom entries {self._catom} is smaller than the number of atoms {self._natoms}"
+                ) from None
 
         self._catom += 1
 

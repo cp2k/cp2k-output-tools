@@ -48,7 +48,6 @@ def xyz_restart_cleaner():
     frames_cache = []
 
     with mmapped(args.source) as content:
-
         for frame_match in FRAME_MATCH.finditer(content):
             comment_match = CP2K_COMMENT_MATCH.match(frame_match["comment"].decode("utf8"))
 
@@ -56,7 +55,6 @@ def xyz_restart_cleaner():
             iteration = int(comment_match["iteration"])
 
             if iteration <= last_iteration:
-
                 try:
                     ndrop = next(n for n, (i, f) in enumerate(reversed(frames_cache), start=1) if i < iteration) - 1
                 except StopIteration:

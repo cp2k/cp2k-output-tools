@@ -61,7 +61,6 @@ def _conv_vals(lst: List[str], unit):
 
 
 def _match_data(content: str, start: int = 0, end: int = sys.maxsize) -> Tuple[Optional[VibrationalAnalysis], Tuple[int, int]]:
-
     match = FREQUENCY_RE.search(content, start, end)
 
     if not match:
@@ -102,7 +101,6 @@ def _match_data(content: str, start: int = 0, end: int = sys.maxsize) -> Tuple[O
 def match_vibrational_analysis(
     content: str, start: int = 0, end: int = sys.maxsize
 ) -> Tuple[Optional[VibrationalAnalysis], Tuple[int, int]]:
-
     match = VIB_ANALYSIS_START_RE.search(content, start, end)
 
     if not match:

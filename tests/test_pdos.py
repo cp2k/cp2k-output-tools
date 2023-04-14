@@ -14,7 +14,6 @@ def test_pdos(script_runner):
 
 @pytest.mark.script_launch_mode("subprocess")
 def test_pdos_list_of_atoms(script_runner):
-
     ret = script_runner.run("cp2k_pdos", str(TEST_DIR / "outputs" / "list-of-atoms.pdos"))
 
     assert ret.success
