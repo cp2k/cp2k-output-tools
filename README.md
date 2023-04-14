@@ -11,7 +11,7 @@ Modular CP2K output file parsers, mostly in the form of regular expressions plus
 
 ## Requirements
 
-* Python 3.6+
+* Python 3.9+
 * regex 2021+
 * click 8+
 * numpy 1.19+
