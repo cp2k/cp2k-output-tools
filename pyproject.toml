@@ -22,7 +22,7 @@ regex = ">=2021.4,<2024.0"
 numpy = "^1.19"
 click = "^8.0"
 rich = ">=10.7,<14.0"
-Pint = ">=0.17,<0.21"
+Pint = ">=0.17,<0.23"
 
 [tool.poetry.extras]
 yaml = ["ruamel.yaml"]
