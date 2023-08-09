@@ -1,6 +1,6 @@
 import sys
 from dataclasses import dataclass
-from typing import List, Optional, Tuple
+from typing import List, Optional, Tuple, Union
 
 import regex as re
 
@@ -18,7 +18,17 @@ GEO_OPT_RE = re.compile(
     re.VERBOSE | re.MULTILINE,
 )
 
-GEO_OPT_STEP_RE = re.compile(
+CELL_OPT_RE = re.compile(
+    r"""
+^\ \*+\n
+\ \*{3} \s+ STARTING\s{3}CELL\s{3}OPTIMIZATION .+\n
+\ \*{3} \s+ (?P<type>\S+) \s+ \*{3}\n
+\ \*+\n
+""",
+    re.VERBOSE | re.MULTILINE,
+)
+
+OPT_STEP_RE = re.compile(
     r"""
 ^\ \-+\n
 \ OPTIMIZATION\ STEP: \s+ (?P<stepnr>\d+)\n
@@ -27,7 +37,7 @@ GEO_OPT_STEP_RE = re.compile(
     re.VERBOSE | re.MULTILINE,
 )
 
-GEO_OPT_END_RE = re.compile(
+OPT_END_RE = re.compile(
     r"""
 ^(
 \ \*{3} \s+ (?P<msg>MAXIMUM\ NUMBER .+?)\s+\*{3}\n
@@ -52,8 +62,31 @@ class GeometryOptimizationStep(Level):
     messages: List[Message]
 
 
-def match_geo_opt(content: str, start: int = 0, end: int = sys.maxsize) -> Optional[Tuple[GeometryOptimization, Tuple[int, int]]]:
-    start_match = GEO_OPT_RE.search(content, start, end)
+@dataclass
+class CellOptimization(Level):
+    converged: bool
+
+
+@dataclass
+class CellOptimizationStep(Level):
+    messages: List[Message]
+
+
+def match_opt(
+    content: str, start: int = 0, end: int = sys.maxsize, opt_type: str = "geo"
+) -> Optional[Tuple[Union[GeometryOptimization, CellOptimization], Tuple[int, int]]]:
+    if opt_type == "geo":
+        opt_re = GEO_OPT_RE
+        opt_step = GeometryOptimizationStep
+        opt = GeometryOptimization
+    elif opt_type == "cell":
+        opt_re = CELL_OPT_RE
+        opt_step = CellOptimizationStep
+        opt = CellOptimization
+    else:
+        print("Unsupported optimization type.")
+
+    start_match = opt_re.search(content, start, end)
 
     if not start_match:
         return None, (start, end)
@@ -61,13 +94,13 @@ def match_geo_opt(content: str, start: int = 0, end: int = sys.maxsize) -> Optio
     step_starts = [start_match.span()[1] + 1]
     step_ends = []
 
-    for match in GEO_OPT_STEP_RE.finditer(content, start, end):
+    for match in OPT_STEP_RE.finditer(content, start, end):
         step_end, step_start = match.span()  # the previous step ends where the next one starts
 
         step_starts.append(step_start)
         step_ends.append(step_end)
 
-    stop_match = GEO_OPT_END_RE.search(content, start, end)
+    stop_match = OPT_END_RE.search(content, start, end)
     converged = True
     if stop_match:
         step_ends.append(stop_match.span()[0])
@@ -86,7 +119,5 @@ def match_geo_opt(content: str, start: int = 0, end: int = sys.maxsize) -> Optio
             sublevels.append(scf)
         else:
             print("NO SCF FOUND in this", content[start:end])
-
-        steps.append(GeometryOptimizationStep(messages=list(match_messages(content, start, end)), sublevels=sublevels))
-
-    return GeometryOptimization(converged=converged, sublevels=steps), (start_match.span()[0], step_ends[-1])
+        steps.append(opt_step(messages=list(match_messages(content, start, end)), sublevels=sublevels))
+    return opt(converged=converged, sublevels=steps), (start_match.span()[0], step_ends[-1])
