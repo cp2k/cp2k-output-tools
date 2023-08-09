@@ -8,12 +8,14 @@ from typing import List, Optional
 
 from .blocks.cell import CellInformation, match_cell
 from .blocks.common import Level, Tree
-from .blocks.geo_opt import (
+from .blocks.linres import Linres, match_linres
+from .blocks.optimization import (
+    CellOptimization,
+    CellOptimizationStep,
     GeometryOptimization,
     GeometryOptimizationStep,
-    match_geo_opt,
+    match_opt,
 )
-from .blocks.linres import Linres, match_linres
 from .blocks.program_info import ProgramInfo, match_program_info
 from .blocks.scf import SCF, InnerSCF, OuterSCF, match_scf
 from .blocks.sirius import Sirius, SiriusSCF, match_sirius
@@ -65,6 +67,19 @@ def _(level: GeometryOptimization, indent=""):
 @pretty_print.register
 def _(level: GeometryOptimizationStep, indent=""):
     print(f"{indent}Geometry Optimization Step:")
+    for msg in level.messages:
+        print(f"{indent}    [{msg.type}]: {msg.message}")
+
+
+@pretty_print.register
+def _(level: CellOptimization, indent=""):
+    print(f"{indent}Cell Optimization:")
+    print(f"{indent}    converged: {level.converged}")
+
+
+@pretty_print.register
+def _(level: CellOptimizationStep, indent=""):
+    print(f"{indent}Cell Optimization Step:")
     for msg in level.messages:
         print(f"{indent}    [{msg.type}]: {msg.message}")
 
@@ -160,6 +175,10 @@ def parse_all(content: str, start: int = 0, end: int = sys.maxsize) -> Tree:
 
         program_info = match_program_info(content, start, end, as_tree_obj=True)
 
+        cell_opt, span = match_opt(content, start, end, "cell")
+        if cell_opt:
+            sublevels.append(cell_opt)
+
         cell_infos = []
         while True:
             cell_info, span = match_cell(content, start, end)
@@ -169,7 +188,7 @@ def parse_all(content: str, start: int = 0, end: int = sys.maxsize) -> Tree:
             cell_infos.append(cell_info)
             start = span[1]  # move the start ahead to the end of the cell section
 
-        geo_opt, span = match_geo_opt(content, start, end)
+        geo_opt, span = match_opt(content, start, end, "geo")
         if geo_opt:
             sublevels.append(geo_opt)
             start = span[1]
