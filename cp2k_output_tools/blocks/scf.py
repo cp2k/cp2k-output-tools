@@ -207,7 +207,9 @@ def match_scf(content: str, start: int = 0, end: int = sys.maxsize) -> Optional[
         conv_match = INNER_SCF_CONV_RE.search(content, start, end)
         if conv_match and energy_match:
             start = match.span()[1]
-            kwargs = {key + "_energy": float(val) for key, val in energy_match.groupdict().items() if val is not None}
+            kwargs = {
+                key + "_energy": Decimal(val) * UREG.hartree for key, val in energy_match.groupdict().items() if val is not None
+            }
             sublevels.append(
                 InnerSCF(
                     converged="SCF run converged" in conv_match["convtxt"], nsteps=int(conv_match["nsteps"]), **kwargs, sublevels=[]

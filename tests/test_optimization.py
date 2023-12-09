@@ -13,8 +13,19 @@ REF_VALUES = {
                 "num_occ_orb": 1,
                 "num_mol_orb": 1,
                 "num_orb_func": 10,
-                "nsteps": 8,
                 "force_eval_energy": -1.16096052,
+                "inner_scf": {
+                    "nsteps": 8,
+                    "overlap_core_energy": 6.0512959e-07,
+                    "self_core_energy": -2.82094792,
+                    "core_hamiltonian_energy": 1.07883184,
+                    "hartree_energy": 1.30392538,
+                    "xc_energy": -0.72277042,
+                    "total_energy": -1.16096052,
+                    "electronic_entropic_energy": None,
+                    "fermi_energy": None,
+                    "dispersion_energy": None,
+                },
             },
             {
                 "nspin": 1,
@@ -22,8 +33,19 @@ REF_VALUES = {
                 "num_occ_orb": 1,
                 "num_mol_orb": 1,
                 "num_orb_func": 10,
-                "nsteps": 4,
                 "force_eval_energy": -1.16118019,
+                "inner_scf": {
+                    "nsteps": 4,
+                    "overlap_core_energy": 0.0000012,
+                    "self_core_energy": -2.82094792,
+                    "core_hamiltonian_energy": 1.08370608,
+                    "hartree_energy": 1.30183473,
+                    "xc_energy": -0.72577425,
+                    "total_energy": -1.16118019,
+                    "electronic_entropic_energy": None,
+                    "fermi_energy": None,
+                    "dispersion_energy": None,
+                },
             },
             {
                 "nspin": 1,
@@ -31,8 +53,19 @@ REF_VALUES = {
                 "num_occ_orb": 1,
                 "num_mol_orb": 1,
                 "num_orb_func": 10,
-                "nsteps": 4,
                 "force_eval_energy": -1.16118537,
+                "inner_scf": {
+                    "nsteps": 4,
+                    "overlap_core_energy": 1.07320985e-06,
+                    "self_core_energy": -2.82094792,
+                    "core_hamiltonian_energy": 1.08302262,
+                    "hartree_energy": 1.30210002,
+                    "xc_energy": -0.72536117,
+                    "total_energy": -1.16118537,
+                    "electronic_entropic_energy": None,
+                    "fermi_energy": None,
+                    "dispersion_energy": None,
+                },
             },
             {
                 "nspin": 1,
@@ -40,8 +73,19 @@ REF_VALUES = {
                 "num_occ_orb": 1,
                 "num_mol_orb": 1,
                 "num_orb_func": 10,
-                "nsteps": 4,
                 "force_eval_energy": -1.16118537,
+                "inner_scf": {
+                    "nsteps": 4,
+                    "overlap_core_energy": 1.07320985e-06,
+                    "self_core_energy": -2.82094792,
+                    "core_hamiltonian_energy": 1.08302280,
+                    "hartree_energy": 1.30210002,
+                    "xc_energy": -0.72536117,
+                    "total_energy": -1.16118537,
+                    "electronic_entropic_energy": None,
+                    "fermi_energy": None,
+                    "dispersion_energy": None,
+                },
             },
         ],
     },
@@ -53,8 +97,19 @@ REF_VALUES = {
                 "num_occ_orb": 16,
                 "num_mol_orb": 16,
                 "num_orb_func": 55,
-                "nsteps": 10,
                 "force_eval_energy": -65.98706397,
+                "inner_scf": {
+                    "nsteps": 10,
+                    "overlap_core_energy": 0.0,
+                    "self_core_energy": -138.89582544,
+                    "core_hamiltonian_energy": 27.22305865,
+                    "hartree_energy": 56.70225641,
+                    "xc_energy": -11.01655328,
+                    "total_energy": -65.98706366,
+                    "electronic_entropic_energy": None,
+                    "fermi_energy": None,
+                    "dispersion_energy": None,
+                },
             },
             {
                 "nspin": 1,
@@ -62,8 +117,19 @@ REF_VALUES = {
                 "num_occ_orb": 16,
                 "num_mol_orb": 16,
                 "num_orb_func": 55,
-                "nsteps": 9,
                 "force_eval_energy": -65.98706506,
+                "inner_scf": {
+                    "nsteps": 9,
+                    "overlap_core_energy": 0.0,
+                    "self_core_energy": -138.89582544,
+                    "core_hamiltonian_energy": 27.22275912,
+                    "hartree_energy": 56.70220023,
+                    "xc_energy": -11.01647284,
+                    "total_energy": -65.98733894,
+                    "electronic_entropic_energy": None,
+                    "fermi_energy": None,
+                    "dispersion_energy": None,
+                },
             },
             {
                 "nspin": 1,
@@ -71,8 +137,19 @@ REF_VALUES = {
                 "num_occ_orb": 16,
                 "num_mol_orb": 16,
                 "num_orb_func": 55,
-                "nsteps": 5,
                 "force_eval_energy": -65.98710767,
+                "inner_scf": {
+                    "nsteps": 5,
+                    "overlap_core_energy": 0.0,
+                    "self_core_energy": -138.89582544,
+                    "core_hamiltonian_energy": 27.20749466,
+                    "hartree_energy": 56.71104696,
+                    "xc_energy": -11.00902476,
+                    "total_energy": -65.98630859,
+                    "electronic_entropic_energy": None,
+                    "fermi_energy": None,
+                    "dispersion_energy": None,
+                },
             },
             {
                 "nspin": 1,
@@ -80,8 +157,19 @@ REF_VALUES = {
                 "num_occ_orb": 16,
                 "num_mol_orb": 16,
                 "num_orb_func": 55,
-                "nsteps": 4,
                 "force_eval_energy": -65.98710770,
+                "inner_scf": {
+                    "nsteps": 4,
+                    "overlap_core_energy": 0.0,
+                    "self_core_energy": -138.89582544,
+                    "core_hamiltonian_energy": 27.20670707,
+                    "hartree_energy": 56.71083178,
+                    "xc_energy": -11.00884866,
+                    "total_energy": -65.98713525,
+                    "electronic_entropic_energy": None,
+                    "fermi_energy": None,
+                    "dispersion_energy": None,
+                },
             },
             {
                 "nspin": 1,
@@ -89,8 +177,19 @@ REF_VALUES = {
                 "num_occ_orb": 16,
                 "num_mol_orb": 16,
                 "num_orb_func": 55,
-                "nsteps": 1,
                 "force_eval_energy": -65.98710770,
+                "inner_scf": {
+                    "nsteps": 1,
+                    "overlap_core_energy": 0.0,
+                    "self_core_energy": -138.89582544,
+                    "core_hamiltonian_energy": 27.20676302,
+                    "hartree_energy": 56.71080149,
+                    "xc_energy": -11.00884677,
+                    "total_energy": -65.98710770,
+                    "electronic_entropic_energy": None,
+                    "fermi_energy": None,
+                    "dispersion_energy": None,
+                },
             },
         ],
         "cell_infos": [
@@ -149,12 +248,19 @@ def test_optimization(opt_type):
     for step_scf, opt_ref in zip(opt_steps_scf + [result.levels[0].sublevels[1]], ref["opt"]):
         assert step_scf.converged
         assert step_scf.sublevels[0].converged
+        inner_scf_ref = opt_ref.pop("inner_scf")
+        inner_scf = step_scf.sublevels[0]
+        for keyw, val in inner_scf_ref.items():
+            if val is None:
+                assert getattr(inner_scf, keyw) is None
+            elif isinstance(val, float):
+                assert abs(float(getattr(inner_scf, keyw).magnitude) - val) < 1.0e-7
+            else:
+                assert getattr(inner_scf, keyw) == val
         assert abs(float(step_scf.force_eval_energy.magnitude) - opt_ref.pop("force_eval_energy")) < 1.0e-7
-        assert step_scf.sublevels[0].nsteps == opt_ref.pop("nsteps")
         for keyw, val in opt_ref.items():
             assert getattr(step_scf, keyw) == val
     if opt_type == "cell":
-        print(result.levels[0].cell_infos)
         assert len(result.levels[0].cell_infos) == len(ref["cell_infos"])
         for info, ref_info in zip(result.levels[0].cell_infos, ref["cell_infos"]):
             assert abs(float(info.volume.magnitude) - ref_info.pop("volume")) < 1.0e-7

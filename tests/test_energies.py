@@ -9,4 +9,16 @@ def test_energies():
         result = next(parse_iter(fhandle.read(), matchers=[match_energies]))
 
         assert result
-        assert result == {"energies": {"total force_eval": -251.687390311050706}}
+        assert result == {
+            "energies": {
+                "core_hamiltonian": 138.60026809219576,
+                "electronic_entropic": -1.256404e-08,
+                "fermi": 0.20382509931778,
+                "hartree": 343.3040142273272,
+                "overlap_core": 3.0088e-10,
+                "self_core": -656.5115154010256,
+                "total": -251.63989121633358,
+                "xc": -77.03265812258856,
+                "total force_eval": -251.687390311050706,
+            }
+        }
