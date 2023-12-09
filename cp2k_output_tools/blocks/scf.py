@@ -7,7 +7,7 @@ import regex as re
 
 from . import UREG
 from .common import FLOAT, Level
-from .energies import FORCE_EVAL_ENERGY_RE
+from .energies import FORCE_EVAL_ENERGY_RE, MAIN_ENERGY_RE
 from .mulliken import MULLIKEN_POPULATION_ANALYSIS_RE
 from .warnings import Message, match_messages
 
@@ -71,7 +71,7 @@ OUTER_SCF_RE = re.compile(
 
 
 INNER_SCF_START_RE = re.compile(r"^\s+ SCF\ WAVEFUNCTION\ OPTIMIZATION", re.VERBOSE | re.MULTILINE)
-INNER_SCF_END_RE = re.compile(
+INNER_SCF_CONV_RE = re.compile(
     r"^\s+ (?P<convtxt>\*\*\*\ SCF\ run\ converged\ in|Leaving\ inner\ SCF\ loop\ after\ reaching) \s+ (?P<nsteps>\d+)\ steps",
     re.VERBOSE | re.MULTILINE,
 )
@@ -132,6 +132,15 @@ class OuterSCF(Level):
 class InnerSCF(Level):
     converged: bool
     nsteps: int
+    overlap_core_energy: Decimal
+    self_core_energy: Decimal
+    core_hamiltonian_energy: Decimal
+    hartree_energy: Decimal
+    xc_energy: Decimal
+    total_energy: Decimal
+    electronic_entropic_energy: Optional[Decimal] = None
+    fermi_energy: Optional[Decimal] = None
+    dispersion_energy: Optional[Decimal] = None
 
 
 @dataclass
@@ -194,11 +203,15 @@ def match_scf(content: str, start: int = 0, end: int = sys.maxsize) -> Optional[
     match = INNER_SCF_START_RE.search(content, start, end)
     if match:
         start = match.span()[1]
-        ematch = INNER_SCF_END_RE.search(content, start, end)
-        if ematch:
+        energy_match = MAIN_ENERGY_RE.search(content, start, end)
+        conv_match = INNER_SCF_CONV_RE.search(content, start, end)
+        if conv_match and energy_match:
             start = match.span()[1]
+            kwargs = {key + "_energy": float(val) for key, val in energy_match.groupdict().items() if val is not None}
             sublevels.append(
-                InnerSCF(converged="SCF run converged" in ematch["convtxt"], nsteps=int(ematch["nsteps"]), sublevels=[])
+                InnerSCF(
+                    converged="SCF run converged" in conv_match["convtxt"], nsteps=int(conv_match["nsteps"]), **kwargs, sublevels=[]
+                )
             )
 
     force_eval_energy: Optional[Decimal] = None
