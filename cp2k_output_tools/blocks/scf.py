@@ -71,7 +71,7 @@ OUTER_SCF_RE = re.compile(
 
 
 INNER_SCF_START_RE = re.compile(r"^\s+ SCF\ WAVEFUNCTION\ OPTIMIZATION", re.VERBOSE | re.MULTILINE)
-INNER_SCF_CONV_RE = re.compile(
+INNER_SCF_END_RE = re.compile(
     r"^\s+ (?P<convtxt>\*\*\*\ SCF\ run\ converged\ in|Leaving\ inner\ SCF\ loop\ after\ reaching) \s+ (?P<nsteps>\d+)\ steps",
     re.VERBOSE | re.MULTILINE,
 )
@@ -204,7 +204,7 @@ def match_scf(content: str, start: int = 0, end: int = sys.maxsize) -> Optional[
     if match:
         start = match.span()[1]
         energy_match = MAIN_ENERGY_RE.search(content, start, end)
-        conv_match = INNER_SCF_CONV_RE.search(content, start, end)
+        conv_match = INNER_SCF_END_RE.search(content, start, end)
         if conv_match and energy_match:
             start = match.span()[1]
             kwargs = {
