@@ -10,10 +10,10 @@ MAIN_ENERGY_RE = re.compile(
 \s*Self\ energy\ of\ the\ core\ charge\ distribution:\s*(?P<self_core>{FLOAT})\n
 \s*Core\ Hamiltonian\ energy:\s*(?P<core_hamiltonian>{FLOAT})\n
 \s*Hartree\ energy:\s*(?P<hartree>{FLOAT})\n
-\s*Exchange-correlation\ energy:\s*(?P<xc>{FLOAT})\n
-(\s*Electronic\ entropic\ energy:\s*(?P<electronic_entropic>{FLOAT})\n)?
-(\s*Fermi\ energy:\s*(?P<fermi>{FLOAT})\n)?
-(\s*Dispersion\ energy:\s*(?P<dispersion>{FLOAT})\n)?
+(?:\s*Exchange-correlation\ energy:\s*(?P<xc>{FLOAT})\n)?
+(?:\s*Electronic\ entropic\ energy:\s*(?P<electronic_entropic>{FLOAT})\n)?
+(?:\s*Fermi\ energy:\s*(?P<fermi>{FLOAT})\n)?
+(?:\s*Dispersion\ energy:\s*(?P<dispersion>{FLOAT})\n)?
 \n
 \s*Total\ energy:\s*(?P<total>{FLOAT})\n
 """,
