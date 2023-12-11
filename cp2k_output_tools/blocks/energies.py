@@ -35,7 +35,7 @@ def match_energies(content: str) -> Optional[BlockMatch]:
     match = MAIN_ENERGY_RE.search(content)
     if match:
         energies = match.groupdict()
-        spans = match.spans(0)
+        spans = [match.spans(0)]
     match = FORCE_EVAL_ENERGY_RE.search(content)
     if match:
         energies["total force_eval"] = match["value"]
