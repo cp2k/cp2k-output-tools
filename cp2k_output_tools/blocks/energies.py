@@ -40,6 +40,6 @@ def match_energies(content: str) -> Optional[BlockMatch]:
     if match:
         energies["total force_eval"] = match["value"]
         spans += match.spans(0)
-    if len(energies) == 0:
+    if not energies:
         return None
     return BlockMatch({"energies": {key: float(val) for key, val in energies.items() if val is not None}}, spans)
