@@ -17,7 +17,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.9"
-regex = ">=2021.4,<2024.0"
+regex = ">=2021.4,<2025.0"
 "ruamel.yaml" = {version = ">=0.16.5,<0.19.0", optional = true}
 numpy = "^1.19"
 click = "^8.0"
