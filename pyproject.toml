@@ -21,7 +21,7 @@ regex = ">=2021.4,<2025.0"
 "ruamel.yaml" = {version = ">=0.16.5,<0.19.0", optional = true}
 numpy = ">=1.19,<3.0"
 click = "^8.0"
-rich = ">=10.7,<14.0"
+rich = ">=10.7,<15.0"
 Pint = ">=0.17,<0.25"
 
 [tool.poetry.extras]
