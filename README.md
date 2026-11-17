@@ -547,6 +547,19 @@ WO3.cp2k-8.bs            WO3.cp2k-8.bs.set-2.csv  WO3.cp2k-8.bs.set-4.csv  WO3.c
 WO3.cp2k-8.bs.set-1.csv  WO3.cp2k-8.bs.set-3.csv  WO3.cp2k-8.bs.set-5.csv
 ```
 
+## Compact electric-moment trajectories
+
+`cp2kparse moments.dat` also reads `DFT/PRINT/MOMENTS FORMAT TRAJECTORY` output. The `moments` key
+contains separate `primary` and `reference 2` record lists for `MOMENTS|` and `MOMENTS_REF2|`.
+Each record contains the iteration identifier, dipole components and norm, and an optional 3×3
+`cell` matrix in CP2K's printed row order. Numeric values remain in Debye, including the scaled
+lattice factors in Berry-phase records. The cell entries are not lengths in angstrom.
+
+Concatenated restarts retain their file order and repeated iteration identifiers. In Python, call
+`cp2k_output_tools.blocks.match_moments(content)` with the trajectory text. It returns a `BlockMatch`
+whose `data["moments"]` holds the records, or `None` if no records are present. Headers are ignored,
+while incomplete or non-finite numeric records raise `ValueError`.
+
 ## Development
 
 ```console

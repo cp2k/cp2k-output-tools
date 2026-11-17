@@ -6,6 +6,7 @@ from .energies import match_energies
 from .forces import match_forces
 from .kpoints import match_kpoints
 from .kv_sections import match_kv_sections
+from .moments import match_moments
 from .mulliken import match_mulliken_population_analysis
 from .program_info import match_program_info
 from .warnings import match_warnings
@@ -20,6 +21,7 @@ builtin_matchers = [
     match_warnings,
     match_bibliography,
     match_kpoints,
+    match_moments,
 ]
 
 UREG = pint.UnitRegistry()

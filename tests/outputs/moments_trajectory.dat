@@ -1,0 +1,8 @@
+# MOMENTS| iter_level dipole_x dipole_y dipole_z dipole_norm [Debye]
+ MOMENTS| 1_1 1.0D+00 2.0E+00 2.0E+00 3.0E+00
+ MOMENTS_REF2| 1_1 -1.0E+00 2.0E+00 2.0E+00 3.0E+00
+# Concatenated restart with repeated iteration identifiers and a variable triclinic cell.
+# MOMENTS| iter_level dipole_x dipole_y dipole_z dipole_norm cell_xx cell_xy cell_xz cell_yx cell_yy cell_yz cell_zx cell_zy cell_zz [Debye]
+ MOMENTS| 1_1 2.0E+00 1.0E+00 2.0E+00 3.0E+00 10 1 2 3 20 4 5 6 30
+ MOMENTS| 1_2 2.0E+00 2.0E+00 1.0E+00 3.0E+00 11 1 2 3 21 4 5 6 31
+ MOMENTS_REF2| 1_2 -2.0E+00 2.0E+00 1.0E+00 3.0E+00 11 1 2 3 21 4 5 6 31
